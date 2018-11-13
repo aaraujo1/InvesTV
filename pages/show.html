@@ -1,0 +1,30 @@
+<h4 class="text-center">{{show.Title}}</h4>
+<div class="row">
+		<canvas 
+				id="line" class="chart chart-line" chart-data="data"
+				chart-labels="labels" chart-series="series" chart-options="options"
+				chart-dataset-override="datasetOverride" chart-click="onClick"
+				chart-colors="Yellow">
+	</canvas>
+</div>
+
+<div class="row">
+	<div class="col col-md-6 text-center">
+    	
+        
+		<img class="img-responsive img-rounded" ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.title}}"><br />
+		
+		
+	</div>
+	<div class="col col-md-6">
+		Total Seasons: {{show.totalSeasons}}<br />
+		Total Episodes: {{show.totalEpisodes}}<br />
+		
+		Show Rating: {{show.imdbRating}} <br />
+		Average Episode Rating: {{show.episodeRatings}} <br />
+		
+		Best Episode: {{show.bestEpisode}}<br />
+		Worst Episode: {{show.worstEpisode}}<br />
+		<button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>
+	</div>
+</div>

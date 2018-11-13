@@ -1,0 +1,78 @@
+<!--<div class="row">-->
+<!--<div class="row">
+        <div class="col col-sm-3">
+			<h1 class="heading">{{appName}}</h1>
+		</div>
+  <div class="col col-sm-4">
+    <h3>Find TV Shows</h3>
+  </div>
+  <div class="col col-sm-5 text-right">
+    <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
+      <div class="form-group">
+        <input id="searchInput" type="text" class="form-control input-sm" ng-model="search" placeholder="search..." size="40" aria-label="Search Shows">
+        <button type="submit" class="btn btn-sm btn-primary" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </form>
+  </div>
+  
+  <hr>
+</div>-->
+<hr>
+
+<!--<div class="row">
+	<div class="col col-md-12">
+    	<h3>My Shows</h3>
+	</div>
+	
+	<hr>
+</div>-->
+<div class="row">
+	<div ng-hide="loading">
+		<div ng-if="search && showList.length == 0">
+			No results found.	
+		</div>
+		<div class="show" ng-repeat="show in showList">
+			<!--from database-->
+			<h2>{{show.title}}</h2>
+			<img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br><!--from api-->
+			
+			<!--Current Episode: {{parseInt(show.episode)}} <br />-->
+			Current Episode: {{show.episode-0+1}} <br />
+			{{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].Title}} <br />
+			Episode Rating: {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].imdbRating}} <br />
+			
+<!--			TODO: SHOW/HIDE if current episode if best or worst-->
+			
+			
+			<!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
+			 {{season.Episodes[show.episode].Title}}</div>
+			{{show.object.Seasons[1].Episodes[show.episode].Title}}-->
+			<button class="btn btn-default" ng-click="nextEpisode(show)"><i class="glyphicon glyphicon-chevron-right"></i></button>
+			
+			<!--{{show.object.Seasons | filter : {'Season':'1'}}}-->
+			
+			<br />
+			<!--{{show.object.Title}}-->
+			<br />
+			
+			Total Episodes: {{show.totalEpisodes}} <br />
+			Remaining Episodes: {{show.totalEpisodes - show.episode}} <br />
+			
+			Show Rating: {{show.object.imdbRating}} <br />
+			Average Episode Rating: {{show.object.episodeRatings}}<br />
+			
+			Average Rating of Remaining Episodes: {{remainingRating}}<br />
+			
+<!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user-->
+			
+			<a href="#!/Show/{{show.title}}" >
+			<button class="btn btn-default" ng-click="preloadShowDetails(show.object)">Details</button>
+			</a>
+
+			<button class="btn btn-danger" ng-click="removeFromCollection(show, $event)" title="Remove {{show.title}} to your collection">Remove</button>
+		</div>
+	</div>
+
+	<div ng-show="loading" class="text-center loading">Loading...</div>
+</div>
+<hr>

@@ -1,0 +1,183 @@
+{
+    "Title": "Lost",
+    "Season": "1",
+    "totalSeasons": "6",
+    "Episodes": [
+        {
+            "Title": "Pilot: Part 1",
+            "Released": "2004-09-22",
+            "Episode": "1",
+            "imdbRating": "9.3",
+            "imdbID": "tt0636289"
+        },
+        {
+            "Title": "Pilot: Part 2",
+            "Released": "2004-09-29",
+            "Episode": "2",
+            "imdbRating": "9.2",
+            "imdbID": "tt0636290"
+        },
+        {
+            "Title": "Tabula Rasa",
+            "Released": "2004-10-06",
+            "Episode": "3",
+            "imdbRating": "8.6",
+            "imdbID": "tt0636294"
+        },
+        {
+            "Title": "Walkabout",
+            "Released": "2004-10-13",
+            "Episode": "4",
+            "imdbRating": "9.2",
+            "imdbID": "tt0636300"
+        },
+        {
+            "Title": "White Rabbit",
+            "Released": "2004-10-20",
+            "Episode": "5",
+            "imdbRating": "8.6",
+            "imdbID": "tt0636303"
+        },
+        {
+            "Title": "House of the Rising Sun",
+            "Released": "2004-10-27",
+            "Episode": "6",
+            "imdbRating": "8.4",
+            "imdbID": "tt0636284"
+        },
+        {
+            "Title": "The Moth",
+            "Released": "2004-11-03",
+            "Episode": "7",
+            "imdbRating": "8.6",
+            "imdbID": "tt0636298"
+        },
+        {
+            "Title": "Confidence Man",
+            "Released": "2004-11-10",
+            "Episode": "8",
+            "imdbRating": "8.8",
+            "imdbID": "tt0636275"
+        },
+        {
+            "Title": "Solitary",
+            "Released": "2004-11-17",
+            "Episode": "9",
+            "imdbRating": "8.7",
+            "imdbID": "tt0636292"
+        },
+        {
+            "Title": "Raised by Another",
+            "Released": "2004-12-01",
+            "Episode": "10",
+            "imdbRating": "8.8",
+            "imdbID": "tt0636291"
+        },
+        {
+            "Title": "All the Best Cowboys Have Daddy Issues",
+            "Released": "2004-12-08",
+            "Episode": "11",
+            "imdbRating": "8.9",
+            "imdbID": "tt0636272"
+        },
+        {
+            "Title": "Whatever the Case May Be",
+            "Released": "2005-01-05",
+            "Episode": "12",
+            "imdbRating": "8.2",
+            "imdbID": "tt0636302"
+        },
+        {
+            "Title": "Hearts and Minds",
+            "Released": "2005-01-12",
+            "Episode": "13",
+            "imdbRating": "8.3",
+            "imdbID": "tt0636282"
+        },
+        {
+            "Title": "Special",
+            "Released": "2005-01-19",
+            "Episode": "14",
+            "imdbRating": "8.3",
+            "imdbID": "tt0636293"
+        },
+        {
+            "Title": "Homecoming",
+            "Released": "2005-02-09",
+            "Episode": "15",
+            "imdbRating": "8.5",
+            "imdbID": "tt0636283"
+        },
+        {
+            "Title": "Outlaws",
+            "Released": "2005-02-16",
+            "Episode": "16",
+            "imdbRating": "8.8",
+            "imdbID": "tt0636288"
+        },
+        {
+            "Title": "...In Translation",
+            "Released": "2005-02-23",
+            "Episode": "17",
+            "imdbRating": "8.6",
+            "imdbID": "tt0636268"
+        },
+        {
+            "Title": "Numbers",
+            "Released": "2005-03-02",
+            "Episode": "18",
+            "imdbRating": "9.2",
+            "imdbID": "tt0636286"
+        },
+        {
+            "Title": "Deus Ex Machina",
+            "Released": "2005-03-30",
+            "Episode": "19",
+            "imdbRating": "9.1",
+            "imdbID": "tt0636276"
+        },
+        {
+            "Title": "Do No Harm",
+            "Released": "2005-04-06",
+            "Episode": "20",
+            "imdbRating": "8.9",
+            "imdbID": "tt0636277"
+        },
+        {
+            "Title": "The Greater Good",
+            "Released": "2005-05-04",
+            "Episode": "21",
+            "imdbRating": "8.5",
+            "imdbID": "tt0636296"
+        },
+        {
+            "Title": "Born to Run",
+            "Released": "2005-05-11",
+            "Episode": "22",
+            "imdbRating": "8.3",
+            "imdbID": "tt0636273"
+        },
+        {
+            "Title": "Exodus: Part 1",
+            "Released": "2005-05-18",
+            "Episode": "23",
+            "imdbRating": "9.2",
+            "imdbID": "tt0636279"
+        },
+        {
+            "Title": "Exodus: Part 2 (Part I)",
+            "Released": "2005-05-25",
+            "Episode": "24",
+            "imdbRating": "9.4",
+            "imdbID": "tt0636280"
+        },
+        {
+            "Title": "Exodus: Part 2 (Part II)",
+            "Released": "2005-05-25",
+            "Episode": "25",
+            "imdbRating": "9.6",
+            "imdbID": "tt6222548"
+        }
+    ],
+    "Response": "True"
+}

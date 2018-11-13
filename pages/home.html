@@ -1,0 +1,89 @@
+<!--<div class="row">-->
+<div class="row">
+        <!--<div class="col col-sm-3">
+			<h1 class="heading">{{appName}}</h1>
+		</div>-->
+  <!--<div class="col col-sm-4">
+    <h3>Find TV Shows</h3>
+  </div>-->
+  <div class="text-center">
+    <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
+      <div class="input-group">
+        <input id="searchInput" type="text" class="form-control input-lg" ng-model="search" placeholder="search for shows..."  aria-label="Search Shows">
+		  <span class="input-group-btn">
+        <button type="submit" class="btn btn-lg btn-warning" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
+			  </span>
+		  
+      </div>
+    </form>
+	  <br />
+		  <hr>
+  </div>
+  
+  
+</div>
+
+	<div ng-show="preload">
+<!--		Preload three shows here. Remove with search results-->
+		<div class="row">
+		
+		<h2>Buy!! Buy!! Buy!!</h2>
+		<h3>Trending shows to invest in!!!</h3>
+		<div class="show" ng-repeat="show in preloadShowsBuy">
+			
+			<div class="col col-sm-4 text-center">
+		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
+		
+		<img class="img-responsive img-rounded" ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+		<h2>{{show.Title}}</h2>
+				<a href="#!/Show/{{show.Title}}" >
+      <button class="btn btn-default" ng-click="preloadShowDetails(show)"> Details</button></a>
+      <!--<button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>-->
+		</div>
+		
+
+		</div>
+			</div>
+		<!--		Preload three shows here. Remove with search results-->
+		<hr>
+		<div class="row">
+		<h2>Sell!! Sell!! Sell!!<h2>
+			<h3>Shows dropping in value</h3>
+		<div class="show" ng-repeat="show in preloadShowsSell">
+			<div class="col col-sm-4 text-center">
+		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
+		
+		<img class="img-responsive img-rounded" ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+		<h2>{{show.Title}}</h2>
+				<a href="#!/Show/{{show.Title}}" >
+      <button class="btn btn-default" ng-click="preloadShowDetails(show)"> Details</button></a>
+      <!--<button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>-->
+		</div>
+		
+</div>
+		</div>
+</div>
+
+<div class="text-center">
+  <div ng-hide="loading">
+    <div ng-if="search && shows.length == 0"> No results found. </div>
+	  <div class="row">
+    <div class="show" ng-repeat="show in shows">
+		<div class="clearfix" ng-if="$index % 3 == 0"></div>
+		<div class="col col-sm-4 text-center">
+		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
+		
+		<img class="img-responsive img-rounded" ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+		<h2>{{show.Title}}</h2>
+      <button class="btn btn-default" ng-click="loadShowDetails(show)"><a href="#!/Show/{{show.Title}}" > Details</a></button>
+      <button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>
+			
+			
+			</div>
+		<br />
+		</div>
+    </div>
+  </div>
+</div>
+<div ng-show="loading" class="text-center">Loading...</div>
+<hr>
