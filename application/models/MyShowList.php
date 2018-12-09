@@ -3,12 +3,23 @@
 class MyShowList extends MY_Model{
 	public $id, $title, $imdbID, $poster, $episode, $totalEpisodes, $object;
 	
+	/*public $id, $showList;*/
 	
 	public function __construct(){
 		if($this->object){
 			// if this object is json from database, convert to object
 			$this->object = json_decode($this->object);
 		}
+		
+		/*if(empty($this->showList)){
+			$this->id = '';
+			$this->showList = array(new Show());
+		}
+		
+		//if title passed, load it
+		if($id){
+			$this->load($id);
+		}*/
 	}
 	
 	public function __toString(){
@@ -28,8 +39,8 @@ class MyShowList extends MY_Model{
 	}
 	
 	
-	public function save(){
-	//public function save($id = '', $e = ''){
+	//public function save(){
+	public function save($id = '', $e = ''){
 		// do some validation here
 		
 		if($this->id){

@@ -17,8 +17,12 @@
 		
 	</div>
 	<div class="col col-md-6">
+		Plot: {{show.Plot}}<br />
+		Genre: {{show.Genre}}<br />
 		Total Seasons: {{show.totalSeasons}}<br />
 		Total Episodes: {{show.totalEpisodes}}<br />
+		Runtime per Episode: {{show.Runtime}}<br />
+		Total Runtime: {{show.totalEpisodes * (show.Runtime|num)}} min<br />
 		
 		Show Rating: {{show.imdbRating}} <br />
 		Average Episode Rating: {{show.episodeRatings}} <br />

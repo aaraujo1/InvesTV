@@ -8,10 +8,14 @@ body{
 .container {
 /*	background-color: rgba(120, 120, 120, .5);*/
 	padding: 30px;
+	
 }
 
 .img-responsive {
     margin: 0 auto;
+	display: block;
+    width: auto;
+    max-height: 100%;
 }
 
 .logo{
@@ -19,3 +23,6 @@ body{
 	margin-bottom: 30px;
 	height: 200px;
 }
+
+
+

@@ -94,7 +94,7 @@ class Shows extends MY_Controller {
 		
 	}
 	
-	public function list(){
+	public function listShows(){
 		$object = MyShowList::getList();
 		
 		// just return json
@@ -115,7 +115,7 @@ class Shows extends MY_Controller {
 		$myShowList->delete();
 	}
 	
-	/*public function update(){
+	public function update(){
 		// if using angularJS $http post, use something like
 		$requestData = file_get_contents('php://input');
 		$showObject = json_decode($requestData)->showData;
@@ -137,7 +137,7 @@ class Shows extends MY_Controller {
 		$myShowList = new MyShowList();
 		
 		// set individual properties
-		$myShowList->title = $showObject->title;
+		/*$myShowList->title = $showObject->title;
 		$myShowList->imdbID = $showObject->imdbID;
 		$myShowList->poster = $showObject->poster;
 		$myShowList->episode = $showObject->episode;
@@ -146,10 +146,12 @@ class Shows extends MY_Controller {
 		//$pokemon->username = $_SESSION['username'];
 		
 		// or just store the whole object as json
-		$myShowList->object = $showObject;
+		$myShowList->object = $showObject;*/
 		
-		$myShowList->save($this->id, $this->episode);
+		$myShowList->load($showObject->id);
 		
-	}*/
+		$myShowList->save($showObject->id, $showObject->episode);
+		
+	}
 	
 }

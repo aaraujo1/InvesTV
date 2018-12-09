@@ -1,12 +1,13 @@
 <?php
 
 class Show extends CI_Model{
-	public $id, $title, $imdbID, $poster, $episode, $totalEpisodes, $remainingRating, $object;
+	public $id, $title, $imdbID, $poster, $episode, $totalEpisodes, $ratingsArray, $object;
 	//in json object
 	public $plot, $rating, $totalSeasons, $ratingFromSeasons;
 	//objects
 	//public $seasons;
 	public $episodes;
+	
 	
 	
 	//$vulns = $data->CVE_Items;
@@ -49,6 +50,7 @@ class Show extends CI_Model{
 			$this->rating = $this->object->imdbRating;
 			$this->totalSeasons = $this->object->totalSeasons;
 			$this->ratingFromSeasons = $this->object->episodeRatings;
+			$this->ratingsArray = $this->object->ratingsArray;
 			
 			$this->season = $this->object->Seasons;
 		}

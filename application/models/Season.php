@@ -2,7 +2,9 @@
 
 class Season extends CI_Model{
 	
-	public $showTitle, $season, $totalSeasons, $episodes, $numberOfEpisodes, $seasonRating, $object;
+	public $showTitle, $season, $totalSeasons, $numberOfEpisodes, $seasonRating, $object;
+	
+	public $episodes;
 	
 	
 	public function __construct($season = ''){
@@ -26,7 +28,7 @@ class Season extends CI_Model{
 			$this->object = json_decode($this->object);
 		}
 		$this->showTitle = 
-		$this->episodes = array();
+		//$this->episodes = array();
 		
 		$this->load();
 		
@@ -34,7 +36,6 @@ class Season extends CI_Model{
 	
 	public function load($sNumber = ''){
 		$file = './lost-season-1.json';
-		
 		$json = file_get_contents($file);
 		$data = json_decode($json);
 		
@@ -42,8 +43,11 @@ class Season extends CI_Model{
 		$this->season = $data->Season;
 		$this->totalSeasons = $data->totalSeasons;
 		
+		//load all seasons based on totalSeasons
+		$this->episodes = array(new Episode());
 		
 		$this->numberOfEpisodes = count($data->Episodes);
+		
 		
 		
 		

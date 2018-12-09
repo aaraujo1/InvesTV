@@ -17,6 +17,7 @@
   
   <hr>
 </div>-->
+
 <hr>
 
 <!--<div class="row">
@@ -27,52 +28,61 @@
 	<hr>
 </div>-->
 <div class="row">
-	<div ng-hide="loading">
-		<div ng-if="search && showList.length == 0">
-			No results found.	
-		</div>
-		<div class="show" ng-repeat="show in showList">
-			<!--from database-->
-			<h2>{{show.title}}</h2>
-			<img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br><!--from api-->
-			
-			<!--Current Episode: {{parseInt(show.episode)}} <br />-->
-			Current Episode: {{show.episode-0+1}} <br />
-			{{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].Title}} <br />
-			Episode Rating: {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].imdbRating}} <br />
-			
-<!--			TODO: SHOW/HIDE if current episode if best or worst-->
-			
-			
-			<!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
+  <div ng-hide="loading">
+    <div ng-if="search && showList.length == 0"> No results found. </div>
+    <div ng-repeat="show in showList"> 
+      <!--from database-->
+      <h2>{{show.title}}</h2>
+      <div class="row">
+        <div class="col col-sm-6"> <img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br>
+          <!--from api--> 
+        </div>
+        <div class="col col-sm-6"> 
+          <!--ADD CHART HERE-->
+          
+          <canvas 
+				id="line" class="chart chart-line" chart-data="show.ratingsArray"
+				chart-labels="labels" chart-series="series" chart-options="options"
+				chart-dataset-override="datasetOverride" chart-click="onClick"
+				chart-colors="Yellow"> </canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-sm-6"> Total Episodes: {{show.totalEpisodes}} <br />
+          Remaining Episodes: {{show.totalEpisodes - show.episode}} <br />
+          Show Rating: {{show.object.imdbRating}} <br />
+          Average Episode Rating: {{show.object.episodeRatings}}<br />
+          Average Rating of Remaining Episodes: {{remainingRating(show)}}<br />
+          
+          <!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user--> 
+          
+          <a href="#!/Show/{{show.title}}" >
+          <button class="btn btn-default" ng-click="preloadShowDetails(show.object)">Details</button>
+          </a>
+          <button class="btn btn-danger" ng-click="removeFromCollection(show, $event)" title="Remove {{show.title}} to your collection">Remove</button>
+        </div>
+        <div class="col col-sm-6"> 
+          <!--Current Episode: {{parseInt(show.episode)}} <br />--> 
+          Current Episode: {{show.episode-0+1}} <br />
+          {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].Title}} <br />
+          Episode Rating: {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].imdbRating}} <br />
+          
+          <!--			TODO: SHOW/HIDE if current episode if best or worst--> 
+          
+          <!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
 			 {{season.Episodes[show.episode].Title}}</div>
 			{{show.object.Seasons[1].Episodes[show.episode].Title}}-->
-			<button class="btn btn-default" ng-click="nextEpisode(show)"><i class="glyphicon glyphicon-chevron-right"></i></button>
-			
-			<!--{{show.object.Seasons | filter : {'Season':'1'}}}-->
-			
-			<br />
-			<!--{{show.object.Title}}-->
-			<br />
-			
-			Total Episodes: {{show.totalEpisodes}} <br />
-			Remaining Episodes: {{show.totalEpisodes - show.episode}} <br />
-			
-			Show Rating: {{show.object.imdbRating}} <br />
-			Average Episode Rating: {{show.object.episodeRatings}}<br />
-			
-			Average Rating of Remaining Episodes: {{remainingRating}}<br />
-			
-<!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user-->
-			
-			<a href="#!/Show/{{show.title}}" >
-			<button class="btn btn-default" ng-click="preloadShowDetails(show.object)">Details</button>
-			</a>
-
-			<button class="btn btn-danger" ng-click="removeFromCollection(show, $event)" title="Remove {{show.title}} to your collection">Remove</button>
-		</div>
-	</div>
-
-	<div ng-show="loading" class="text-center loading">Loading...</div>
+          <button class="btn btn-default" ng-click="nextEpisode(show)"><i class="glyphicon glyphicon-chevron-right"></i></button>
+          
+          <!--{{show.object.Seasons | filter : {'Season':'1'}}}--> 
+          
+          <br />
+          <!--{{show.object.Title}}--> 
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-show="loading" class="text-center loading">Loading...</div>
 </div>
 <hr>
