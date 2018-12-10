@@ -35,9 +35,9 @@
 			<div class="col col-sm-4 text-center">
 		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
 				
-		<div class="container">
+		<div class="img-responsive image-container">
 			
-		<img class="img-responsive img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+		<img class="img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
 				
 			
 			</div>
@@ -58,9 +58,9 @@
 		<div class="show" ng-repeat="show in preloadShowsSell">
 			<div class="col col-sm-4 text-center">
 		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
-		
+		<div class="img-responsive image-container">
 		<img class="img-responsive img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
-			
+				</div>
 		<h2>{{show.Title}}</h2>
 				<a href="#!/Show/{{show.Title}}" >
 		  <button class="btn btn-default" ng-click="loadShowDetails(show)"> Details</button>
@@ -80,8 +80,9 @@
 		<div class="clearfix" ng-if="$index % 3 == 0"></div>
 		<div class="col col-sm-4 text-center">
 		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
-		
+		<div class="img-responsive image-container">
 		<img class="img-responsive img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+			</div>
 		<h2>{{show.Title}}</h2>
       <a href="#!/Show/{{show.Title}}" >
 		  <button class="btn btn-default" ng-click="loadShowDetails(show)"> Details</button>

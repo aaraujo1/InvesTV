@@ -34,17 +34,21 @@
       <!--from database-->
       <h2>{{show.title}}</h2>
       <div class="row">
-        <div class="col col-sm-6"> <img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br>
+        <div class="col col-sm-6">
+			<div class="img-responsive image-container">
+				<img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br>
+			</div>
           <!--from api--> 
         </div>
         <div class="col col-sm-6"> 
           <!--ADD CHART HERE-->
-          
+          <div class="img-responsive image-container">
           <canvas 
 				id="line" class="chart chart-line" chart-data="show.ratingsArray"
 				chart-labels="labels" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick"
 				chart-colors="Yellow"> </canvas>
+			  </div>
         </div>
       </div>
       <div class="row">

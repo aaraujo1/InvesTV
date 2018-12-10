@@ -9,6 +9,7 @@ class MyShowList extends MY_Model implements Iterator{
 	private $id;
 	private $position = 0;
 	private $shows = array();
+	private $object;
 	
 	
 	

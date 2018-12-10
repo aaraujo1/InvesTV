@@ -1,37 +1,50 @@
-body{
-	background-color: #333;
-	color: #CCC;
+body {
+    background-color: #333;
+    color: #CCC;
 }
-
-
-
-.wrap {
-/*	background-color: rgba(120, 120, 120, .5);*/
-	padding: 30px;
-	width: 100%;
+/*for whole page*/
+.container {
+    padding: 100px;
 }
-
 .img-responsive {
     margin: 0 auto;
-	display: block;
-    width: auto;
-    max-height: 100%;
-}
-
-.logo{
-	margin-top: 30px;
-	margin-bottom: 30px;
-	height: 200px;
-}
-
-.container {
-	width: 100%;
-
-	/*display: table;*/
-}
-
-.container  .img-responsive {
     display: block;
-    width: auto;
-    max-height: 100%;
+    max-width: 100%;/*max-height: 100%;*/
 }
+.logo {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 200px;
+}
+.image-container img {
+    width: 100%;
+    height: 100%;
+}
+
+.image-container {
+    height: 450px;
+    width: 300px;
+}
+
+@media screen and (max-width: 768px) {
+.image-container {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;/*max-height: 100%;*/
+}
+}
+
+@media screen and (max-width: 992px) {
+.image-container {
+    height: 200px;
+    width: 133px;
+}
+}
+
+@media screen and (max-width: 1200px) {
+.image-container {
+    height: 300px;
+    width: 200px;
+}
+}
+

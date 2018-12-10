@@ -17,18 +17,18 @@
 		
 	</div>
 	<div class="col col-md-6">
-		Plot: {{show.Plot}}<br />
-		Genre: {{show.Genre}}<br />
-		Total Seasons: {{show.totalSeasons}}<br />
-		Total Episodes: {{show.totalEpisodes}}<br />
-		Runtime per Episode: {{show.Runtime}}<br />
-		Total Runtime: {{show.totalEpisodes * (show.Runtime|num)}} min<br />
+		<strong>Plot: </strong>{{show.Plot}}<br />
+		<strong>Genre: </strong>{{show.Genre}}<br />
+		<strong>Total Seasons: </strong>{{show.totalSeasons}}<br />
+		<strong>Total Episodes: </strong>{{show.totalEpisodes}}<br />
+		<strong>Runtime per Episode: </strong>{{show.Runtime}}<br />
+		<strong>Total Runtime: </strong>{{show.totalEpisodes * (show.Runtime|num)}} min<br />
 		
-		Show Rating: {{show.imdbRating}} <br />
-		Average Episode Rating: {{show.episodeRatings}} <br />
+		<strong>Show Rating: </strong>{{show.imdbRating}} <br />
+		<strong>Average Episode Rating: </strong>{{show.episodeRatings}} <br />
 		
-		Best Episode: {{show.bestEpisode}}<br />
-		Worst Episode: {{show.worstEpisode}}<br />
-		<button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>
+		<strong>Best Episode: </strong>{{show.bestEpisode}}<br />
+		<strong>Worst Episode: </strong>{{show.worstEpisode}}<br />
+		<button class="btn btn-primary" ng-click="addToList($event)" title="Add {{show.Title}} to your collection">Add to Collection</button>
 	</div>
 </div>
