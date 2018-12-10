@@ -9,7 +9,7 @@
   <div class="text-center">
     <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
       <div class="input-group">
-        <input id="searchInput" type="text" class="form-control input-lg" ng-model="search" placeholder="search for shows..."  aria-label="Search Shows">
+        <input id="searchInput" type="text" class="form-control input-lg" ng-model="$root.search" placeholder="search for shows..."  aria-label="Search Shows">
 		  <span class="input-group-btn">
         <button type="submit" class="btn btn-lg btn-warning" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
 			  </span>
@@ -34,15 +34,16 @@
 			
 			<div class="col col-sm-4 text-center">
 		<!--<a href="#!/shows/{{show.imdbID}}" >Go To Show Details</a>-->
-		
+				
+		<div class="container">
 			
 		<img class="img-responsive img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
 				
 			
-			
+			</div>
 		<h2>{{show.Title}}</h2>
 				<a href="#!/Show/{{show.Title}}" >
-      <button class="btn btn-default" ng-click="preloadShowDetails(show)"> Details</button></a>
+      <button class="btn btn-default" ng-click="loadShowDetails(show)"> Details</button></a>
       <!--<button class="btn btn-primary" ng-click="add(show, $event)" title="Add {{show.Title}} to your collection">Add to Collection</button>-->
 		</div>
 		

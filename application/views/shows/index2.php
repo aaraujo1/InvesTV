@@ -45,7 +45,7 @@
 <!-- end header -->
 	
 	
-	<div class="container">
+	<div class="wrap">
 	
 	<!--<div class="row">
         <div class="col col-sm-3">

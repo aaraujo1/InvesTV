@@ -5,10 +5,10 @@ body{
 
 
 
-.container {
+.wrap {
 /*	background-color: rgba(120, 120, 120, .5);*/
 	padding: 30px;
-	
+	width: 100%;
 }
 
 .img-responsive {
@@ -24,5 +24,14 @@ body{
 	height: 200px;
 }
 
+.container {
+	width: 100%;
 
+	/*display: table;*/
+}
 
+.container  .img-responsive {
+    display: block;
+    width: auto;
+    max-height: 100%;
+}
