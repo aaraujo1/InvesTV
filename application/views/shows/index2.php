@@ -22,8 +22,23 @@
 	<link href="<?= base_url('css/style.css') ?>" rel="stylesheet">
 </head>
 <body>
-
-    
+	<!--
+<div class="col col-xs-1">
+        <div class="pull-right">
+        	{if $auth->user()}
+				<a href="{site_url('logout')}" class="btn btn-default hidden-xs top-menu-button" role="button">
+					<span class="glyphicon glyphicon-user"></span> Logout
+				</a>
+        	{else}
+        		<a href="#" class="btn btn-default hidden-xs top-menu-button" role="button" data-toggle="modal" data-target="#login-modal">
+					<span class="glyphicon glyphicon-user"></span> Login
+				</a>
+        	{/if}
+			<h1><a class="visible-xs glyphicon glyphicon-menu-hamburger pull-right" data-toggle="collapse" href="#collapsable-nav" aria-expanded="false" aria-controls="collapsable-nav"></a></h1>
+        </div>
+      </div>
+	-->
+    <div class="container">
     <div class="row">
         <div class="col col-sm-12 text-center">
 			<a href="#" ng-click="clear()">
@@ -45,7 +60,7 @@
 <!-- end header -->
 	
 	
-	<div class="container">
+	
 	
 	<!--<div class="row">
         <div class="col col-sm-3">
@@ -78,6 +93,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js"></script>
 <script src="<?= base_url('js/angular-chart.min.js') ?>"></script>
 
 <script src="<?= base_url('js/investv_app.js') ?>"></script>

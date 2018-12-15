@@ -7,8 +7,12 @@ class User extends MY_Model {
 	public $lastname = '';
 	public $username = '';
 	public $email = '';
+	
+	
 
-	private $password = ''; // make sure this database field is varchar(255)
+	public $password = ''; // make sure this database field is varchar(255)
+	
+	public $showList = [];
 		
 	public function __construct($username = '')
 	{
@@ -26,7 +30,7 @@ class User extends MY_Model {
 	
 	public function load($username = ''){
 		// query built using CI's query builder
-		$query = $this->db->from('WorldUsers')
+		$query = $this->db->from('InvestTvUsers')
 						->where('username', $username)
 						->limit(1)
 						->get();
@@ -53,28 +57,33 @@ class User extends MY_Model {
 	// will insert or update record depending if it exists already
 	public function save(){
 		// get data ready for database
-		$data = array('firstname' => $this->firstname,
-					'lastname' => $this->lastname,
+		$data = array('firstname' => $this->firstName,
+					'lastname' => $this->lastName,
 					'email' => $this->email,
 					'username' => $this->username,
 					'password' => $this->password);
 		
+		echo 'saving';
+		$this->db->insert('InvesTvUsers', $data);
+		echo 'saved';
 		// if it has an ID, it already exists, so we will update
-		if($this->id){
-			return $this->db->where('id', $this->id)
-							->update('WorldUsers', $data);		
-		// else, it doesn't exist, so create a new one	
-		}else{
-			if($this->db->insert('WorldUsers', $data)){
-			
-				// since we are creating a new city, we will want to know the ID that was generated
-				$this->id = $this->db->insert_id('id');
-				return true;
-			}
-		}
-		
-		return false;
-		
+//		if($this->id){
+//			return $this->db->where('id', $this->id)
+//							->update('InvestTvUsers', $data);		
+//		// else, it doesn't exist, so create a new one	
+//		}else{
+//			/*if($this->db->insert('InvestTvUsers', $data)){
+//			
+//				// since we are creating a new city, we will want to know the ID that was generated
+//				$this->id = $this->db->insert_id('id');
+//				return true;
+//			}*/
+//			$this->db->insert('InvestTvUsers', $data);
+//			
+//		}
+//		
+//		return false;
+//		
 	}
 	
 	public function setPassword($password){
@@ -102,7 +111,7 @@ class User extends MY_Model {
 	}
 	
 	public static function usernameExists($username){
-		$query = static::db()->from('WorldUsers')
+		$query = static::db()->from('InvestTvUsers')
 						->where('username', $username)
 						->get();
 						
@@ -111,7 +120,7 @@ class User extends MY_Model {
 	}
 	
 	public static function emailExists($email){
-		$query = static::db()->from('WorldUsers')
+		$query = static::db()->from('InvestTvUsers')
 						->where('email', $email)
 						->get();
 						

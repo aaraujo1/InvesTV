@@ -1,60 +1,67 @@
 <?php
 
 class Show extends CI_Model{
-	public $id, $title, $imdbID, $poster, $episode, $totalEpisodes, $ratingsArray, $object;
+	
+	/*public $id, $title, $imdbID, $poster, $totalEpisodes, $ratingsArray, $object;
 	//in json object
 	public $plot, $rating, $totalSeasons, $ratingFromSeasons;
 	//objects
 	//public $seasons;
-	public $episodes;
+	public $episodes;*/
 	
 	
 	
-	//$vulns = $data->CVE_Items;
 	
-	/*if (file_exists($file)) {
-    echo "The file $file exists";
-	} else {
-    echo "The file $file does not exist";
-	}
-	foreach ($vulns as $vuln) {
-    $cveid = $vuln->cve->CVE_data_meta->ID;
-    echo $cveid; echo '<br>';
-	}*/
+	//private $object;
+	
+	//in json object
+	//from omdbapi
+	public $actors, $awards, $country, $director, $genre, $imdbID, $imdbRating, $imdbVotes, $language, $metascore, $plot, $poster, $rated, $ratings, $released, $response, $runtime, $seasons, $title, $type, $writer, $year;
+	
+	//created in js
+	public $bestEpisode, $episodeListArray, $episodeRatingTotal, $episodeRatings, $ratingsArray, $totalEpisodes, $totalSeasons, $worstEpisode;
+	
+	//new properties
+	public $currentEpisode, $currentSeason, $totalEpisodesWatched;
+	
+	public $flagRemove;
 
 	
-	public function __construct($showID = ''){
+	public function __construct($object=""){
 		if(empty($this->title)){
 			$this->title = '';
 			$this->plot = '';
 			$this->poster = '';
 			$this->rating = 0.0;
 			$this->totalSeasons = 0;
+			$this->currentEpisode = 0;
+			$this->currentSeason = 0;
+			$this->totalEpisodesWatched = 0;
 			
+			$this->flagRemove = false;
+			$this->flagWatching = false;
 			
 			
 			$this->seasons = array(new Season());
-			$this->episodes = array(new Episode());
+			//$this->episodes = array(new Episode());
 			
 			$this->imdbID = '';
 		}
 		//if title passed, load it
-		if($showID){
-			$this->load($showID);
-		}
-		//$this->load();
+	
 		
-		if($this->object){
-			$this->object = json_decode($this->object);
-			$this->plot = $this->object->Plot;
-			$this->rating = $this->object->imdbRating;
-			$this->totalSeasons = $this->object->totalSeasons;
-			$this->ratingFromSeasons = $this->object->episodeRatings;
-			$this->ratingsArray = $this->object->ratingsArray;
-			
-			$this->season = $this->object->Seasons;
+		if($object){
+			foreach($object as $key => $val){
+					$this->{lcfirst($key)} = $val;
+				}
 		}
 		
+		
+	}
+	
+	public static function update($key, $value){
+		//this should update a show's record
+		$this->$key = $value;
 		
 		
 	}
@@ -65,11 +72,12 @@ class Show extends CI_Model{
 //		$json = file_get_contents($file);
 //		$data = json_decode($json);
 		
-		$this->title = $data->Title;
+		$this->title = $data->title;
 		$this->plot = $data->Plot;
 		$this->poster = $data->Poster;
-		$this->rating = $data->imdbRating;
+		$this->imdbRating = $data->imdbRating;
 		$this->totalSeasons = $data->totalSeasons;
+		
 		
 		//load all seasons based on totalSeasons
 		$this->seasons = array(new Season());
@@ -77,6 +85,8 @@ class Show extends CI_Model{
 		$this->imdbID = $data->imdbID;
 		
 		$this->object = json_decode($data->object);
+		
+		
 	}
 	
 	public function getShowRating(){

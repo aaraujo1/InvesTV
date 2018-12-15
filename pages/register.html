@@ -1,0 +1,46 @@
+<hr>
+<div class="row">
+<h2>Register</h2>
+	<div class="col col-sm-6 text-center">
+	<!-- Begin # Login Form -->
+        <form id="register-form" ng-submit="registerNewUser()" >
+          <div class="modal-body">
+			  
+			  <input id="register_firstName" class="form-control input-lg" type="text" placeholder="First Name" name="firstName" ng-model="firstName" required>
+			  
+			  <input id="register_lastName" class="form-control input-lg" type="text" placeholder="Last Name" name="lastName" ng-model="lastName" required>
+			  
+			  <input id="register_email" class="form-control input-lg" type="email" placeholder="Email" name="email" ng-model="email" required>
+			  
+            <input id="register_username" class="form-control input-lg" type="text" placeholder="Username" name="username" ng-model="username" required>
+			  
+            <input id="register_password" class="form-control input-lg" type="password" placeholder="Password" name="password" ng-model="password" required>
+			  
+			  <input id="register_repeat_password" class="form-control input-lg" type="password" placeholder="Repeat Password" name="repeat_password" ng-model="repeat_password" required>
+			  
+            <input type="hidden" name="referrer" value="{uri_string()}">
+          </div>
+          <div class="modal-footer">
+            <div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+            </div>
+            
+          </div>
+        </form>
+        <!-- End # Login Form --> 
+	</div>
+</div>
+
+
+<div class="text-center">
+    <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
+      <div class="input-group">
+        <input id="searchInput" type="text" class="form-control input-lg" ng-model="$root.search" placeholder="search for shows..."  aria-label="Search Shows">
+		  <span class="input-group-btn">
+        <button type="submit" class="btn btn-lg btn-warning" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
+			  </span>
+		  
+      </div>
+    </form>
+
+  </div>

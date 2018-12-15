@@ -55,8 +55,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 //custom routes
 $route['shows/add'] = 'Shows/add';
-$route['shows/list'] = 'Shows/list';
-$route['shows/remove/(:num)'] = 'Shows/remove/$1';
+$route['shows/list'] = 'Shows/listShows';
+//$route['shows/remove/(:num)'] = 'Shows/remove/$1';
+$route['shows/remove'] = 'Shows/remove';
+
 
 $route['shows/(:any)-(:any)'] = 'Shows/detail/$1';
+$route['login/registerNewUser'] = 'login/registerNewUser';
 

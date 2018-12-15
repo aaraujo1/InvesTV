@@ -1,0 +1,37 @@
+<hr>
+<div class="row">
+<h2>Login</h2>
+	<div class="col col-sm-6 text-center">
+	<!-- Begin # Login Form -->
+        <form id="login-form" ng-submit="attemptLogin()" >
+          <div class="modal-body">
+            <input id="login_username" class="form-control input-lg" type="text" placeholder="Username" name="username" required>
+            <input id="login_password" class="form-control input-lg" type="password" placeholder="Password" name="password" required>
+            <input type="hidden" name="referrer" value="{uri_string()}">
+          </div>
+          <div class="modal-footer">
+            <div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+            </div>
+            <div class="text-center">
+              <a id="login_register_btn" type="button" class="btn btn-link" href="{site_url('login/register')}">Don't have an account?</a>
+            </div>
+          </div>
+        </form>
+        <!-- End # Login Form --> 
+	</div>
+</div>
+
+
+<div class="text-center">
+    <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
+      <div class="input-group">
+        <input id="searchInput" type="text" class="form-control input-lg" ng-model="$root.search" placeholder="search for shows..."  aria-label="Search Shows">
+		  <span class="input-group-btn">
+        <button type="submit" class="btn btn-lg btn-warning" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
+			  </span>
+		  
+      </div>
+    </form>
+
+  </div>

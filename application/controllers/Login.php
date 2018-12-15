@@ -8,46 +8,38 @@ class Login extends MY_Controller {
 		
 		// if there isn't a referrer alrady set
 		// add one to session for when login is successful
-		if(!isset($_SESSION['referrer'])){
-			// check for referrer set in login form
-			$referrer = $this->input->post('referrer');
-			if($referrer){
-				$this->session->set_flashdata('referrer', $referrer);
-			}else{
-				// default referrer
-				$this->session->set_flashdata('referrer', '/');
-			}
-		}
+//		if(!isset($_SESSION['referrer'])){
+//			// check for referrer set in login form
+//			$referrer = $this->input->post('referrer');
+//			if($referrer){
+//				$this->session->set_flashdata('referrer', $referrer);
+//			}else{
+//				// default referrer
+//				$this->session->set_flashdata('referrer', '/');
+//			}
+//		}
 	}
 	
-	public function index(){
+	/*public function index(){
 		$this->view->assign('page_title', 'Login');
 		$this->view->display('login/index.tpl');
-	}
+	}*/
 	
 	public function attemptLogin(){
-		// get form values
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
 		
-		// if both values are provided, attempt login
-		if($username and $password){
-			$this->auth->login($username, $password);
-		}
+		$requestData = file_get_contents('php://input');
+		$requestObject = json_decode($requestData);
 		
-		// if login successful, redirect to referer
-		// else, show login form again
-		if($this->auth->user()){
-			if(isset($_SESSION['referrer'])){
-				redirect($_SESSION['referrer']);
-			}else{
-				redirect('/');
-			}
-		}else{
-			$this->view->assign('page_title', 'Login');
-			$this->view->assign('error', 'Invalid username or password.');
-			$this->view->display('login/index.tpl');
-		}
+		
+		$this->load->model('User');
+		
+		$user = new User();
+		
+		$user->firstname = $requestObject->firstName;
+		$user->lastname = $requestObject->lastName;
+		$user->email = $requestObject->email;
+		$user->username = $requestObject->username;
+		$user->password = $requestObject->password;
 		
 	}
 	
@@ -64,11 +56,25 @@ class Login extends MY_Controller {
 	
 	public function registerNewUser(){
 		// get form values
-		
+		$requestData = file_get_contents('php://input');
+		$userObject = json_decode($requestData);
 		// validate
 		
+		// add to database using model
+		$user = new User();
+		
+		// set individual properties
+		$user->firstName = $userObject->firstName;
+		$user->lastName = $userObject->lastName;
+		$user->email = $userObject->email;
+		$user->username = $userObject->username;
+		$user->password = $userObject->password;
+		$user->repeat_password = $userObject->repeat_password;
+		
+		$user->save();
+		
 		// attempt registration
-		//$errors = $this->auth->register($firstname, $lastname, $email, $username, $password, $repeatPassword);
+		$errors = $this->auth->register($firstname, $lastname, $email, $username, $password, $repeatPassword);
 		
 		// do something if there are errors
 		//print_r($errors);

@@ -14,10 +14,10 @@ class MyShowList extends MY_Model{
 		/*if(empty($this->showList)){
 			$this->id = '';
 			$this->showList = array(new Show());
-		}
+		}*/
 		
 		//if title passed, load it
-		if($id){
+		/*if($id){
 			$this->load($id);
 		}*/
 	}
@@ -27,7 +27,7 @@ class MyShowList extends MY_Model{
 	}
 	
 	public function load($id){
-		$row = $this->db->get_where('investv', array('id' => $id))->row();
+		$row = $this->db->get_where('investv0', array('id' => $id))->row();
 		$this->id = $row->id;
 		$this->title = $row->title;
 		$this->imdbID = $row->imdbID;
@@ -53,7 +53,7 @@ class MyShowList extends MY_Model{
 				die("Connection failed: " . $db->connect_error);
 			} */
 			
-			$sql = "UPDATE investv SET episode=? WHERE id=?";
+			$sql = "UPDATE investv0 SET episode=? WHERE id=?";
 			
 			if ($db->query($sql,[$e, $id]) === TRUE) {
 				echo "Record updated successfully";
@@ -84,7 +84,7 @@ class MyShowList extends MY_Model{
 				'totalEpisodes' => $this->totalEpisodes,
 				'object' => json_encode($this->object));
 			
-			$this->db->insert('investv', $data);
+			$this->db->insert('investv0', $data);
 		}
 		
 	}
@@ -92,14 +92,14 @@ class MyShowList extends MY_Model{
 	public function delete(){
 		if($this->id){
 			// delete
-			$this->db->delete('investv', array('id' => $this->id));
+			$this->db->delete('investv0', array('id' => $this->id));
 		}
 	}
 	
 	public static function getList(){
 		$db = self::db();
 		
-		$sql = "SELECT * FROM investv";
+		$sql = "SELECT * FROM investv0";
 		
 		$query = $db->query($sql);
 		$result = $query->custom_result_object('Show');

@@ -1,91 +1,120 @@
-<!--<div class="row">-->
-<!--<div class="row">
-        <div class="col col-sm-3">
-			<h1 class="heading">{{appName}}</h1>
-		</div>
-  <div class="col col-sm-4">
-    <h3>Find TV Shows</h3>
-  </div>
-  <div class="col col-sm-5 text-right">
-    <form ng-submit="findShows()" class="search-form form-inline form-horizontal">
-      <div class="form-group">
-        <input id="searchInput" type="text" class="form-control input-sm" ng-model="search" placeholder="search..." size="40" aria-label="Search Shows">
-        <button type="submit" class="btn btn-sm btn-primary" aria-label="Search"><i class="glyphicon glyphicon-search"></i></button>
-      </div>
-    </form>
-  </div>
-  
-  <hr>
-</div>-->
-
 <hr>
-
-<!--<div class="row">
-	<div class="col col-md-12">
-    	<h3>My Shows</h3>
-	</div>
-	
-	<hr>
-</div>-->
 <div class="row">
   <div ng-hide="loading">
     <div ng-if="search && showList.length == 0"> No results found. </div>
-    <div ng-repeat="show in showList"> 
-      <!--from database-->
-      <h2>{{show.title}}</h2>
-      <div class="row">
-        <div class="col col-sm-6">
-			<div class="img-responsive image-container">
-				<img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br>
-			</div>
-          <!--from api--> 
-        </div>
-        <div class="col col-sm-6"> 
-          <!--ADD CHART HERE-->
-          <div class="img-responsive image-container">
-          <canvas 
+    <h1>Shows Watching: {{watchingList.length}} / 3</h1>
+    
+      <div ng-repeat="show in watchingList "> 
+        <!--from database-->
+        <h2>{{show.title}}</h2>
+        <div class="row">
+          <div class="col col-sm-4">
+            <div class="img-responsive image-container"> <img class="img-responsive img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}"><br>
+            </div>
+            <!--from api--> 
+          </div>
+          <div class="col col-sm-8"> 
+            <!--ADD CHART HERE-->
+            <div class="chart-container">
+              <canvas 
 				id="line" class="chart chart-line" chart-data="show.ratingsArray"
-				chart-labels="labels" chart-series="series" chart-options="options"
+				chart-labels="show.episodeListArray" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick"
 				chart-colors="Yellow"> </canvas>
-			  </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col col-sm-6"> Total Episodes: {{show.totalEpisodes}} <br />
-          Remaining Episodes: {{show.totalEpisodes - show.episode}} <br />
-          Show Rating: {{show.object.imdbRating}} <br />
-          Average Episode Rating: {{show.object.episodeRatings}}<br />
-          Average Rating of Remaining Episodes: {{remainingRating(show)}}<br />
-          
-          <!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user--> 
-          
-          <a href="#!/Show/{{show.title}}" >
+        <br />
+        <div class="row">
+          <div class="col col-sm-4"> <strong>Total Episodes: </strong>{{show.totalEpisodes}} <br />
+            <strong>Remaining Episodes: </strong>{{show.totalEpisodes - show.totalEpisodesWatched}} <br />
+			  <strong>Remaining Minutes: </strong>{{(show.totalEpisodes - show.totalEpisodesWatched)}} <br />
+            <strong>Show Rating: </strong>{{show.imdbRating}} <br />
+            <strong>Average Episode Rating: </strong>{{show.episodeRatings}}<br />
+            <strong>Average Rating of Remaining Episodes: </strong>{{remainingRating(show)}}<br />
+			  <strong>Number of Outliers: </strong>{{show.stats.outliers}} (<span class="glyphicon glyphicon-arrow-down" style="color:#d9534f"></span>{{show.stats.lowerOutliers.length}} / <span class="glyphicon glyphicon-arrow-up" style="color:#5cb85c"></span>{{show.stats.upperOutliers.length}})<br />
+            
+            <!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user--> 
+            
+            <!--<a href="#!/Show/{{show.title}}" >
           <button class="btn btn-default" ng-click="preloadShowDetails(show.object)">Details</button>
-          </a>
-          <button class="btn btn-danger" ng-click="removeFromCollection(show, $event)" title="Remove {{show.title}} to your collection">Remove</button>
-        </div>
-        <div class="col col-sm-6"> 
-          <!--Current Episode: {{parseInt(show.episode)}} <br />--> 
-          Current Episode: {{show.episode-0+1}} <br />
-          {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].Title}} <br />
-          Episode Rating: {{(show.object.Seasons | filter:{Season:"1"})[0].Episodes[show.episode].imdbRating}} <br />
-          
-          <!--			TODO: SHOW/HIDE if current episode if best or worst--> 
-          
-          <!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
+          </a>--> 
+            
+          </div>
+			
+          <div class="col col-sm-6 text-right"> 
+            <!--Current Episode: {{parseInt(show.episode)}} <br />--> 
+            <strong>Current Season: </strong>{{show.currentSeason-0+1}} <br />
+            <strong>Current Episode: </strong>{{show.currentEpisode-0+1}} <br />
+            <em>{{show.seasons[show.currentSeason].Episodes[show.currentEpisode].Title}}</em> <br />
+            <strong>Episode Rating: </strong>{{show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating}} <br />
+            
+            <!--<div ng-hide="outlier">-->
+			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.bestEpisode">This is the best episode! </div>
+            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating > show.stats.upperLimit">This episode is an outlier. It's REALLY good!! <br />Like, damn... what the hell did I just watch, good.</div>
+            
+			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.worstEpisode"> This is the worst episode! </div>
+            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating < show.stats.lowerLimit"> This episode is an outlier. It's THAT bad. <br />Like, shouldn't even be considered an episode, bad.</div>
+            
+            <!--			TODO: SHOW/HIDE if current episode if best or worst--> 
+            
+            <!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
 			 {{season.Episodes[show.episode].Title}}</div>
-			{{show.object.Seasons[1].Episodes[show.episode].Title}}-->
-          <button class="btn btn-default" ng-click="nextEpisode(show)"><i class="glyphicon glyphicon-chevron-right"></i></button>
-          
-          <!--{{show.object.Seasons | filter : {'Season':'1'}}}--> 
-          
-          <br />
-          <!--{{show.object.Title}}--> 
-          <br />
+			{{show.object.Seasons[1].Episodes[show.episode].Title}}--> 
+          </div>
+          <div class="col col-sm-2 text-center">
+            <button class="btn btn-default" ng-click="nextEpisode(show)">Next Episode <i class="glyphicon glyphicon-chevron-right"></i></button>
+            
+            <!--{{show.object.Seasons | filter : {'Season':'1'}}}--> 
+            
+            <br />
+            <!--{{show.object.Title}}--> 
+            <br />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-sm-2">
+            <button class="btn btn-danger" ng-click="removeWatching(show, $event)" title="Remove {{show.title}} to your watching list">Watch Later</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-sm-2"> </div>
+          <div class="col col-sm-8">
+            <hr>
+          </div>
+          <div class="col col-sm-2"></div>
         </div>
       </div>
+    
+    <hr>
+    <h1>Show Collection: {{showList.length}}</h1>
+    
+      <div class="row">
+        <div ng-repeat="show in showList">
+			<div ng-if="!show.flagRemove">
+			 <div class="clearfix" ng-if="$index % 2 == 0"></div>
+			<div class="show">
+          <div class="col col-sm-2">
+            <div class="img-responsive image-container-small"> <img class="img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}">
+				
+            </div>
+          </div>
+          <div class="col col-sm-4">
+            <h2>{{show.title}}</h2>
+            <strong>Total Episodes: </strong>{{show.totalEpisodes}} <br />
+            <strong>Show Rating: </strong>{{show.imdbRating}} <br />
+			  <strong>Number of Outliers: </strong>{{show.stats.outliers}} (<span class="glyphicon glyphicon-arrow-down" style="color:#d9534f"></span>{{show.stats.lowerOutliers.length}} / <span class="glyphicon glyphicon-arrow-up" style="color:#5cb85c"></span>{{show.stats.upperOutliers.length}}) <br />
+            <button  class="btn btn-danger"  ng-click="removeFromCollection(show, $event)" title="Remove {{show.title}} to your collection">Stop Watching</button>
+			  
+            <button class="btn btn-warning" ng-disabled="watchingList.length == 3 " ng-click="addWatching(show, $event)" title="Add {{show.title}} to your watching list">Watch Now!</button><br />
+			  <button class="btn black-background" ng-click="delete(show, $event)" title="Delete {{show.title}} from records">Remove</button>
+          </div>
+          </div>
+        </div>
+      </div>
+		
     </div>
+	  
   </div>
   <div ng-show="loading" class="text-center loading">Loading...</div>
 </div>

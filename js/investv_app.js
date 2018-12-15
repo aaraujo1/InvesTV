@@ -28,24 +28,6 @@ app.filter('num', function () {
 	};
 });
 
-
-//service to pass data between controllers
-//SOURCE: https://stackoverflow.com/questions/25601755/angular-ng-click-load-controller
-/*app.service('Share', function(){
-	//return {text: 'hello'};
-	var text ='show';
-   return { 
-     get: function(){
-       return text;
-    },
-     set: function(value){
-      text=value;
-      console.log(text);
-    },
-      value:text
-    };
-});*/
-
 // configure our routes
 app.config(function ($routeProvider) {
 	$routeProvider
@@ -56,27 +38,43 @@ app.config(function ($routeProvider) {
 		controller: 'homeController'
 	})
 
-	// Show detal page
+	// Show detail page
 	.when('/Show/:showName', {
 		//		.when('/Show/:showName', {
 		templateUrl: 'pages/show.html',
 		controller: 'showsController'
 	})
 
-	// Show detail page
-	/*.when('/Show/:showName', {
-		templateUrl : 'pages/show.html',
-		controller  : 'homeController'
-	})*/
 
 	// My Shows page
 	.when('/myShows', {
 		templateUrl: 'pages/myShows.html',
 		controller: 'myShowsController',
+	})
+
+	//register page
+	.when('/User/Register', {
+		templateUrl: 'pages/register.html',
+		controller: 'registerController',
+	})
+
+	//login page
+	.when('/User/Login', {
+		templateUrl: 'pages/login.html',
+		controller: 'loginController',
+	})
+
+	//user profile page
+	.when('/User/:userName', {
+		templateUrl: 'pages/user.html',
+		controller: 'userController',
 	});
+
 });
 
 //configure controllers
+
+//home page
 app.controller('homeController', function ($scope, $http, $rootScope) {
 	$scope.loading = false;
 	$scope.preload = true;
@@ -88,74 +86,61 @@ app.controller('homeController', function ($scope, $http, $rootScope) {
 	//chart color
 	$scope.colors = "yellow";
 
-
-
-	// perform "default" search when the page loads
-	angular.element(document).ready(function () {
-		console.log("rootScope.Search: " + $rootScope.search);
-		$scope.findShows();
-
-		if ($rootScope.shows) {
-			$scope.preload = false;
-		} else {
-			$scope.preload = true;
-		}
-
-		//$rootScope.shows = $rootScope.shows.concat($scope.preloadShowsBuy, $scope.preloadShowsSell);
-
-
-
-		if ($rootScope.showBasic) {
-			$scope.loadShowDetails($rootScope.showBasic.Title);
-		}
-	});
-
-
-	$scope.preloadShowsBuy = [{
+	//preloaded shows to view detail. hard coded objects.
+	$scope.preloadShowsBuy = [
+		{
 		"Title": "Game of Thrones",
-		"Year": "2011–",
-		"imdbID": "tt0944947",
-		"Type": "series",
 		"Poster": "https://m.media-amazon.com/images/M/MV5BMjE3NTQ1NDg1Ml5BMl5BanBnXkFtZTgwNzY2NDA0MjI@._V1_SX300.jpg"
-	}, {
+	}, 
+		{
 		"Title": "Daredevil",
-		"Year": "2015–",
-		"imdbID": "tt3322312",
-		"Type": "series",
 		"Poster": "https://m.media-amazon.com/images/M/MV5BODcwOTg2MDE3NF5BMl5BanBnXkFtZTgwNTUyNTY1NjM@._V1_SX300.jpg"
-	}, {
+	}, 
+		/*{
 		"Title": "Doctor Who",
 		"Year": "2005–",
 		"imdbID": "tt0436992",
 		"Type": "series",
 		"Poster": "https://m.media-amazon.com/images/M/MV5BNDY1YmZhZjEtY2E3NC00M2VkLThlZmUtODczMmNiZjMxMWRhXkEyXkFqcGdeQXVyNzA5NTYxMDg@._V1_SX300.jpg"
-	}];
-
-	$scope.preloadShowsSell = [{
+		},*/
+		{
+		"Title": "Stranger Things",
+    	"Poster": "https://m.media-amazon.com/images/M/MV5BMjUwMDgzOTg3Nl5BMl5BanBnXkFtZTgwNTI4MDk5MzI@._V1_SX300.jpg",
+		}
+	];
+	$scope.preloadShowsSell = [
+		{
 		"Title": "Arrow",
-		"Year": "2012–",
-		"imdbID": "tt2193021",
-		"Type": "series",
 		"Poster": "https://m.media-amazon.com/images/M/MV5BMTU5MjU5NjUyOV5BMl5BanBnXkFtZTgwMDY1ODIyNjM@._V1_SX300.jpg"
 	}, {
 		"Title": "The Walking Dead",
-		"Year": "2010–",
-		"imdbID": "tt1520211",
-		"Type": "series",
 		"Poster": "https://m.media-amazon.com/images/M/MV5BMTcwMDAzMDk3OF5BMl5BanBnXkFtZTgwMjY0MzcyNjM@._V1_SX300.jpg"
 	}, {
-		"Title": "The Simpsons",
-		"Year": "1989–",
-		"imdbID": "tt0096697",
-		"Type": "series",
-		"Poster": "https://m.media-amazon.com/images/M/MV5BYjFkMTlkYWUtZWFhNy00M2FmLThiOTYtYTRiYjVlZWYxNmJkXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg"
+		"Title": "Dexter",
+		"Poster": "https://m.media-amazon.com/images/M/MV5BMTM5MjkwMTI0MV5BMl5BanBnXkFtZTcwODQwMTc0OQ@@._V1_SX300.jpg"
 	}];
 
 
+	// perform "default" search when the page loads
+	angular.element(document).ready(function () {
 
+		//see in console if $rootScope.search is empty or not
+		console.log("rootScope.Search: " + $rootScope.search);
 
+		//search for whatever is in the $rootScope.search variable
+		$scope.findShows();
 
-	//search API
+		//see if anything got loaded in the $rootScope.shows array
+		if ($rootScope.shows) {
+			//it contains object, so don't display preloaded shows
+			$scope.preload = false;
+		} else {
+			//it is empty, so display prelaoded shows
+			$scope.preload = true;
+		}
+	});
+
+	//search API for shows
 	$scope.findShows = function () {
 		$scope.loading = true;
 		$scope.preload = false;
@@ -186,175 +171,25 @@ app.controller('homeController', function ($scope, $http, $rootScope) {
 
 	};
 
-	$scope.add = function (show, e) {
+
+
+	/*------------------------------------*/
+	/*------ METHODS TO ADD TO LIST ------*/
+	/*------------------------------------*/
+
+	//done during search
+
+	/*$scope.add = function (show, e) {
 		$scope.loadShowDetails(show.Title);
 		$scope.addToList(e);
-	};
-
-
-	$scope.loadShowDetails = function (showTitle) {
-		//$scope.loading = true;
-		$http({
-			method: 'get',
-			url: 'https://www.omdbapi.com/',
-			params: {
-				apikey: '670e6ec0',
-				type: 'series',
-				t: showTitle
-			}
-		}).then(function (response) {
-			$scope.show = response.data;
-			//"show" object before functions
-			console.log("show");
-			console.log($scope.show);
-
-			//get number of seasons the show has, 
-			//and make that number of queries to get episodes of each season 
-			$scope.show.Seasons = $scope.loadEpisodes($scope.show.totalSeasons, showTitle);
-
-			//log function
-			console.log("loadEpisodes function done ");
-
-			console.log("Season array");
-			console.log($scope.episodes);
-
-
-
-			//console.log("Season array length: ");
-			//console.log($scope.show.Seasons.length);
-			//console.log($scope.episodes.length);
-
-			//get total number of episodes and add to "show" object
-			//$scope.show.totalEpisodes = $scope.getTotalEpisodes($scope.show.Seasons);
-			//$scope.show.totalEpisodes = $scope.getTotalEpisodes($scope.episodes);
-
-			//$scope.show.totalEpisodes = $scope.totalEpisodes;
-			//log function 
-			//console.log("getTotalEpisodes function done ");
-
-
-			//make sure functions added to the "show" object
-			console.log($scope.show);
-
-
-			//$scope.loading = false;
-		});
-		//$rootScope.showDetail = show;
-		//$scope.show = show;
-	};
-
-	$scope.loadEpisodes = function (seasons, showTitle) {
-		//var counter = 0;
-		$scope.show.totalEpisodes = 0;
-
-		//get total of ratings
-		var total = 0.0;
-
-		for (var i = 1; i <= seasons; i++) {
-			$http({
-				method: 'get',
-				url: 'https://www.omdbapi.com/',
-				params: {
-					apikey: '670e6ec0',
-					type: 'series',
-					t: showTitle,
-					Season: i
-				}
-			}).then(function (response) {
-				//add object to array
-				$scope.episodes.push(response.data);
-				console.log(i);
-				console.log(response.data);
-				/*console.log(response.data.Episodes);
-				console.log(response.data.Episodes.length);*/
-
-				//get episode array length and total it
-				//$scope.show.totalEpisodes += response.data.Episodes.length;
-
-				for (var j = 0; j < response.data.Episodes.length; j++) {
-					if (response.data.Episodes[j].imdbRating !== "N/A") {
-						$scope.ratingsArray.push(parseFloat(response.data.Episodes[j].imdbRating));
-						total += parseFloat(response.data.Episodes[j].imdbRating);
-						$scope.episodeListArray.push("S" + response.data.Season + "E" + response.data.Episodes[j].Episode);
-					}
-				}
-
-				//set total number of episodes
-				$scope.show.totalEpisodes = $scope.ratingsArray.length;
-				//set array of episodes ratings
-				$scope.show.ratingsArray = $scope.ratingsArray;
-
-				//get total of episode ratings
-				$scope.show.episodeRatingTotal = total;
-
-				//get average episode ratings
-				$scope.show.episodeRatings = ($scope.show.episodeRatingTotal / $scope.show.totalEpisodes).toFixed(1);
-
-
-				//get min and max ratings
-				//SOURCE: https://codeburst.io/javascript-finding-minimum-and-maximum-values-in-an-array-of-objects-329c5c7e22a2
-
-				console.log("best episode");
-				console.log(Math.max(...$scope.ratingsArray));
-				console.log($scope.ratingsArray.indexOf(Math.max(...$scope.ratingsArray)));
-				console.log($scope.episodeListArray[$scope.ratingsArray.indexOf(Math.max(...$scope.ratingsArray))]);
-
-
-				$scope.show.bestEpisode = $scope.episodeListArray[$scope.ratingsArray.indexOf(Math.max(...$scope.ratingsArray))];
-				$scope.show.worstEpisode = $scope.episodeListArray[$scope.ratingsArray.indexOf(Math.min(...$scope.ratingsArray))];
-				/*$scope.show.worstEpisode = function() {
-					return $scope.ratingsArray.reduce((min, p) => p.y < min ? p.y : min, $scope.ratingsArray[0].y);
-				};
-
-				$scope.show.bestEpisode = function() {
-					return $scope.ratingsArray.reduce((max, p) => p.y > max ? p.y : max, $scope.ratingsArray[0].y);
-				};*/
-
-
-
-				//chart data and labels
-				$scope.labels = $scope.episodeListArray;
-				$scope.data = $scope.ratingsArray;
-
-			});
-
-
-
-			//console.log($scope.labels);
-			//console.log($scope.data);
-		}
-
-		/*//get min and max ratings
-		//SOURCE: https://codeburst.io/javascript-finding-minimum-and-maximum-values-in-an-array-of-objects-329c5c7e22a2
-		function getMinY(data) {
-			return data.reduce((min, p) => p.y < min ? p.y : min, data[0].y);
-		}
-		
-		function getMaxY(data) {
-			return data.reduce((max, p) => p.y > max ? p.y : max, data[0].y);
-		}*/
-		//		console.log("episodes");
-		//		console.log($scope.episodes);
-		/*console.log("counter after");
-		console.log(counter);
-		$scope.show.totalEpisodes = counter;*/
-
-		//get total of ratings
-
-
-
-		return $scope.episodes;
-
-	};
+	};*/
 
 	//post to database
-	$scope.addToList = function (e) {
+	/*$scope.addToList = function (e) {
 		e.target.innerHTML = 'Adding...';
 		e.target.classname = 'btn btn-primary';
 
-		/*console.log("add function starting");
-		console.log(show);*/
-
+		
 
 
 		$http({
@@ -371,40 +206,12 @@ app.controller('homeController', function ($scope, $http, $rootScope) {
 			e.target.innerHTML = 'Added!';
 			e.target.className = 'btn btn-success';
 		});
-	};
-
-	/*$scope.getTotalEpisodes = function(seasonArray){
-		var counter = 0;
-		console.log("starting getTotalEpisodes function");
-		console.log(counter);
-		console.log(seasonArray);
-		console.log(seasonArray.length);
-		console.log(seasonArray[0]);
-		console.log(seasonArray[0].Episodes);
-		console.log(seasonArray[0].Episodes.length);
-		
-		for (var i = 0; i < seasonArray.length; i++){
-			counter += seasonArray[i].Episodes.length;
-			console.log(seasonArray[i]);
-			
-		}
-		console.log(counter);
-		return counter;
-		
 	};*/
-
-
-
-	/*$rootScope.showBasic = $rootScope.shows.find(function (s) {
-		return s.Title === $routeParams.showName;
-	});*/
-
-
 
 
 });
 
-
+//show detail
 app.controller('showsController', function ($scope, $http, $rootScope, $routeParams) {
 	$scope.show = {};
 	$scope.ratingsArray = [];
@@ -458,7 +265,7 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 
 		//array for promises
 		var ajaxCalls = [];
-		
+
 		//make AJAX calls based on number of seasons
 		for (var i = 1; i <= seasons; i++) {
 			//add to array of promises
@@ -475,7 +282,7 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 		//return array of seasons
 		return $scope.show.Seasons;
 	};
-	
+
 	/*---- load season ----*/
 	$scope.loadEpisodesPerSeason = function (i) {
 
@@ -552,14 +359,14 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 			//SOURCE: https://codeburst.io/javascript-finding-minimum-and-maximum-values-in-an-array-of-objects-329c5c7e22a2
 			$scope.show.bestEpisode = $scope.episodeListArray[$scope.ratingsArray.indexOf(Math.max(...$scope.ratingsArray))];
 			$scope.show.worstEpisode = $scope.episodeListArray[$scope.ratingsArray.indexOf(Math.min(...$scope.ratingsArray))];
-			
+
 
 			//chart data and labels
 			$scope.labels = $scope.episodeListArray;
 			$scope.data = $scope.ratingsArray;
 
 		});
-	};	
+	};
 
 	/*------------------------------------*/
 	/*------ METHODS TO ADD TO LIST ------*/
@@ -592,55 +399,344 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 
 });
 
+//my show list
 app.controller('myShowsController', function ($scope, $http) {
 	$scope.loading = true;
+	$scope.id = '';
 	$scope.showList = [];
+	$scope.watchingList = [];
 	$scope.currentEpisodeName = '';
 	$scope.remainingRating = '0';
 
 	//chart data and labels
-	$scope.labels = [...Array(200).keys()];
-
-	//$scope.data = [1,2];
-
-
-
+	//$scope.labels = [...Array(200).keys()];
 
 	angular.element(document).ready(function () {
-
-
 
 		// get Shows from our database
 		$http({
 			method: 'get',
 			url: app.base_url + 'shows/listShows' // CI route
 		}).then(function (response) {
-			$scope.showList = response.data;
+			console.log(response);
+			$scope.showList = response.data.showList;
+			$scope.watchingList = response.data.watchingList;
+			$scope.id = response.data.id;
 			$scope.loading = false;
+			
 			console.log($scope.showList);
 
-
+		
+		
+		$scope.showList.forEach(function(s){
+			console.log(s);
+			$scope.loadShowStats(s);
+			
 		});
+		
+		console.log($scope.showList);
+		console.log($scope.watchingList);
 
-
+});
 	});
+	
+	//get stats of a show
+	$scope.loadShowStats = function (show){
+		show.stats = {};
+		show.stats.standardDeviation = math.std(show.ratingsArray);
+		
+		var ratingsArraySorted = show.ratingsArray.slice();
+		
+		math.sort(ratingsArraySorted);
+		
+		if ((show.totalEpisodes/2)%5){
+			//odd number of shows
+			show.stats.ratingsArraySortedFirstHalf = ratingsArraySorted.slice(0 , math.ceil(show.totalEpisodes/2));
+			show.stats.ratingsArraySortedSecondHalf = ratingsArraySorted.slice(show.totalEpisodes/2);
+		}else{
+			//even number of shows
+			show.stats.ratingsArraySortedFirstHalf = ratingsArraySorted.slice(0 , math.floor(show.totalEpisodes/2));
+			show.stats.ratingsArraySortedSecondHalf = ratingsArraySorted.slice(show.totalEpisodes/2);
+		}
+		
+		show.stats.quartile = [math.median(show.stats.ratingsArraySortedFirstHalf), math.median(show.ratingsArray), math.median(show.stats.ratingsArraySortedSecondHalf)];
+		
+		
+		//show.quartile = math.quantileSeq(show.ratingsArray,[0.5],true);
+		show.stats.iqr = show.stats.quartile[2]-show.stats.quartile[0];
+		show.stats.lowerLimit = show.stats.quartile[0] - (show.stats.iqr * 1.5);
+		show.stats.upperLimit = show.stats.quartile[2] - 0  + (show.stats.iqr * 1.5);
+		
+		//SOURCE: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+		show.stats.lowerOutliers = show.stats.ratingsArraySortedFirstHalf.filter(rating => rating < show.stats.lowerLimit);
+		show.stats.upperOutliers = show.stats.ratingsArraySortedSecondHalf.filter(rating => rating > show.stats.upperLimit);
+		show.stats.outliers = show.stats.lowerOutliers.length + show.stats.upperOutliers.length;
+	};
 
+	//add show to watching list
+	$scope.addWatching = function (show, e){
+		
+		
+		e.target.innerHTML = 'Adding...';
+		
+		show.flagWatching = true;
+		
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/addWatching/', // CI route
+			data: {
+				//showData: $scope.showList
+				showData: show
+			}
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+
+			//$scope.$apply(function (){
+			// remove from local showList array
+			var index = $scope.showList.indexOf(show);
+			$scope.showList.splice(index, 1);
+			console.log($scope.showList);
+			// add to local watchingList array
+			$scope.watchingList.push(show);
+			console.log($scope.watchingList);
+			
+			
+			//});
+		});
+	};
+	
+	
+	
+	//move to next episode in show
 	$scope.nextEpisode = function (show) {
-		//add 1
-		show.episode++;
+		//add 1 to current episode
+		//check if no more episodes
+		
+		if (show.seasons[show.currentSeason].Episodes.length >  show.currentEpisode+1){
+			//there are still episodes in the season
+			show.currentEpisode++;
+			show.totalEpisodesWatched++;
+		} else {
+			//there are no more episodes, so go to the next season
+			//check if there are more seasons
+			if (show.seasons.length >  show.currentSeason+1){
+				//there are more seasons
+				show.currentSeason++;
+				//reset episode
+				show.currentEpisode = 0;
+				show.totalEpisodesWatched++;
+			}else{
+				//disable next button
+				//remove show from watching
+			}
+		}
+
+		console.log(show);
+
 		//save to DB
 		$scope.updateList(show);
+
+		
+		//check if last episode
+		//if so...
+
+		//if not
 		//get remaining ratings
 		$scope.remainingRating(show);
 
+		//remake chart?
+
+	};
+
+	//post to database
+	$scope.updateList = function (show) {
+		//e.target.innerHTML = 'Adding...';
+		//e.target.classname = 'btn btn-primary';
+
+		/*console.log("add function starting");
+		console.log(show);*/
+
+
+
+
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/update', // CI route
+			data: {
+				//showData: $scope.showList
+				showData: show
+			} //,
+			//user: user->id}//if i know id of user in angluar, I can pass it as a reqest
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+			//e.target.innerHTML = 'update!';
+			//e.target.className = 'btn btn-success';
+		});
+	};
+
+	//recalculate rating of remaining episodes
+	$scope.remainingRating = function (show) {
+		//var arr = show.object.ratingsArray;
+
+		
+		/*show.total = 0.0;
+
+		for (var i = show.totalEpisodesWatched; i < show.totalEpisodes; i++) {
+			show.total += show.ratingsArray[i];
+		}
+
+
+
+		return (show.total / (show.totalEpisodes - show.totalEpisodesWatched)).toFixed(2);*/
+		
+		show.remainingRatings = show.ratingsArray.slice(show.totalEpisodesWatched);
+		return math.mean(show.remainingRatings).toFixed(2);
+	};
+	
+	//remove show from collection
+	$scope.removeFromCollection = function (show, e) {
+		show.flagRemove = true;
+		
+		e.target.innerHTML = 'Removing...';
+		
+		// remove from database
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/remove/', // CI route
+			data: {
+				//showData: $scope.showList
+				showData: show
+			}
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+
+			// remove from local array
+			//var index = $scope.showList.indexOf(show);
+			//$scope.showList.splice(index, 1);
+		});
+	};
+	
+	//remove show from collection
+	$scope.removeWatching = function (show, e) {
+		e.target.innerHTML = 'Removing...';
+		
+		// remove from database
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/removeWatching/', // CI route
+			data: {
+				//showData: $scope.showList
+				showData: show
+			}
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+
+			// remove from local watchingList array
+			var index = $scope.watchingList.indexOf(show);
+			$scope.watchingList.splice(index, 1);
+			console.log($scope.watchingList);
+			
+			// add to local showList array
+			$scope.showList.push(show);
+			console.log($scope.showList);
+			
+		});
+	};
+	
+	//delete show completely
+	$scope.delete = function (show, e){
+		e.target.innerHTML = 'Deleting...';
+		
+		// remove from database
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/delete/', // CI route
+			data: {
+				showData: show
+			}
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+
+			// remove from local array
+			var index = $scope.showList.indexOf(show);
+			$scope.showList.splice(index, 1);
+		});
+	};
+	
+});
+
+//register user
+app.controller('registerController', function ($scope, $http) {
+	$scope.firstName = "";
+	$scope.lastName = "";
+	$scope.email = "";
+	$scope.username = "";
+	$scope.password = "";
+	$scope.repeat_password = "";
+
+	$scope.registerNewUser = function () {
+		$scope.user = {
+
+		};
+		console.log($scope.user);
+
+		$http({
+			method: 'post',
+			url: app.base_url + 'login/registerNewUser', // CI route
+			data: {
+				firstName: $scope.firstName,
+				lastName: $scope.lastName,
+				email: $scope.email,
+				username: $scope.username,
+				password: $scope.password,
+				repeat_password: $scope.repeat_password
+			} //,
+			//user: user->id}//if i know id of user in angluar, I can pass it as a reqest
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+
+			//e.target.innerHTML = 'update!';
+			//e.target.className = 'btn btn-success';
+		});
 	};
 
 
-	$scope.chartData = function (show) {
-		//chart data and labels
-		$scope.show.labels = [...Array(5).keys()];
-		$scope.show.data = show.ratingsArray;
-	};
+	//post to database
+	/*$scope.updateList = function (show) {
+		//e.target.innerHTML = 'Adding...';
+		//e.target.classname = 'btn btn-primary';
+
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/update', // CI route
+			data: {
+				showData: show
+			} //,
+			//user: user->id}//if i know id of user in angluar, I can pass it as a reqest
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+
+			//e.target.innerHTML = 'update!';
+			//e.target.className = 'btn btn-success';
+		});
+	};*/
+
+});
+
+//login user
+app.controller('loginController', function ($scope, $http) {
 
 	//post to database
 	$scope.updateList = function (show) {
@@ -669,40 +765,13 @@ app.controller('myShowsController', function ($scope, $http) {
 		});
 	};
 
-	$scope.remainingRating = function (show) {
-		//var arr = show.object.ratingsArray;
 
-		var total = 0.0;
+});
 
+//user profile page
+app.controller('userController', function ($scope, $routeParams) {
+	//if user is logged in, show profile page
 
-		//$scope.show.remainingRating = arr.splice(0,1,'');
-		//$scope.show.remainingRating = array_shift($arr);
+	
 
-		for (var i = show.episode; i < show.totalEpisodes; i++) {
-			total += show.ratingsArray[i];
-		}
-
-
-
-		return total / (show.totalEpisodes - show.episode);
-	};
-
-
-
-	$scope.removeFromCollection = function (show, e) {
-		e.target.innerHTML = 'Removing...';
-
-		// remove from database
-		$http({
-			method: 'get',
-			url: app.base_url + 'shows/remove/' + show.id // CI route
-		}).then(function (response) {
-			// check response to make sure everything was okay
-			// ...
-
-			// remove from local array
-			var index = $scope.showList.indexOf(show);
-			$scope.showList.splice(index, 1);
-		});
-	};
 });
