@@ -122,6 +122,7 @@ implements Iterator {
 		//		$this->showList = json_decode($row->showList);
 		$showListObject = json_decode( $row->showList );
 		$watchingListObject = json_decode( $row->watchingList );
+		$removedList = json_decode( $row->removedList );
 
 
 		//TODO: Remove this because JSON objects are now stored as show objects in DB

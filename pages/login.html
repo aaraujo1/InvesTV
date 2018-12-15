@@ -5,8 +5,8 @@
 	<!-- Begin # Login Form -->
         <form id="login-form" ng-submit="attemptLogin()" >
           <div class="modal-body">
-            <input id="login_username" class="form-control input-lg" type="text" placeholder="Username" name="username" required>
-            <input id="login_password" class="form-control input-lg" type="password" placeholder="Password" name="password" required>
+            <input id="login_username" class="form-control input-lg" type="text" placeholder="Username" name="username" ng-model="username" required>
+            <input id="login_password" class="form-control input-lg" type="password" placeholder="Password" name="password" ng-model="password" required>
             <input type="hidden" name="referrer" value="{uri_string()}">
           </div>
           <div class="modal-footer">

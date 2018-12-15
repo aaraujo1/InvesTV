@@ -31,15 +31,18 @@ class Login extends MY_Controller {
 		$requestObject = json_decode($requestData);
 		
 		
-		$this->load->model('User');
 		
-		$user = new User();
+		//$this->load->model('User');
 		
-		$user->firstname = $requestObject->firstName;
+		//$user = new User($requestObject->username);
+		
+		/*$user->firstname = $requestObject->firstName;
 		$user->lastname = $requestObject->lastName;
-		$user->email = $requestObject->email;
-		$user->username = $requestObject->username;
-		$user->password = $requestObject->password;
+		$user->email = $requestObject->email;*/
+		//$user->username = $requestObject->username;
+		//$user->password = $requestObject->password;
+		
+		return $requestObject;
 		
 	}
 	
@@ -74,13 +77,24 @@ class Login extends MY_Controller {
 		$user->save();
 		
 		// attempt registration
-		$errors = $this->auth->register($firstname, $lastname, $email, $username, $password, $repeatPassword);
+		//$errors = $this->auth->register($firstname, $lastname, $email, $username, $password, $repeatPassword);
 		
 		// do something if there are errors
 		//print_r($errors);
 		
 		// redirect 
 		
+	}
+	
+	//a garbage function for me to get user information 
+	public function getUser(){
+		// get form values
+		/*$requestData = file_get_contents('php://input');
+		$userObject = json_decode($requestData);*/
+		
+		$user = new User('aaraujo1');
+		
+		echo json_encode($user);
 	}
 	
 	

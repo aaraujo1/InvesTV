@@ -65,7 +65,12 @@ app.config(function ($routeProvider) {
 	})
 
 	//user profile page
-	.when('/User/:userName', {
+	/*.when('/User/:userName', {
+		templateUrl: 'pages/user.html',
+		controller: 'userController',
+	});*/
+	
+	.when('/User/User', {
 		templateUrl: 'pages/user.html',
 		controller: 'userController',
 	});
@@ -405,6 +410,7 @@ app.controller('myShowsController', function ($scope, $http) {
 	$scope.id = '';
 	$scope.showList = [];
 	$scope.watchingList = [];
+	$scope.removedList = [];
 	$scope.currentEpisodeName = '';
 	$scope.remainingRating = '0';
 
@@ -421,6 +427,7 @@ app.controller('myShowsController', function ($scope, $http) {
 			console.log(response);
 			$scope.showList = response.data.showList;
 			$scope.watchingList = response.data.watchingList;
+			$scope.removedList = response.data.removedList;
 			$scope.id = response.data.id;
 			$scope.loading = false;
 			
@@ -506,8 +513,6 @@ app.controller('myShowsController', function ($scope, $http) {
 			//});
 		});
 	};
-	
-	
 	
 	//move to next episode in show
 	$scope.nextEpisode = function (show) {
@@ -684,7 +689,7 @@ app.controller('registerController', function ($scope, $http) {
 	$scope.password = "";
 	$scope.repeat_password = "";
 
-	$scope.registerNewUser = function () {
+	$scope.registerNewUser = function (e) {
 		$scope.user = {
 
 		};
@@ -706,8 +711,10 @@ app.controller('registerController', function ($scope, $http) {
 			// check response to make sure everything was okay
 			// ...
 
-			//e.target.innerHTML = 'update!';
-			//e.target.className = 'btn btn-success';
+			e.target.innerHTML = 'registered!';
+			e.target.className = 'btn btn-success';
+			
+			console.log(response);
 		});
 	};
 
@@ -738,29 +745,31 @@ app.controller('registerController', function ($scope, $http) {
 //login user
 app.controller('loginController', function ($scope, $http) {
 
+	$scope.user = {};
+	$scope.userName = '';
+	$scope.password = '';
+	
 	//post to database
-	$scope.updateList = function (show) {
-		//e.target.innerHTML = 'Adding...';
+	$scope.attemptLogin = function () {
+		//e.target.innerHTML = 'Logging In...';
 		//e.target.classname = 'btn btn-primary';
-
-		/*console.log("add function starting");
-		console.log(show);*/
-
-
-
 
 		$http({
 			method: 'post',
-			url: app.base_url + 'shows/update', // CI route
+			url: app.base_url + 'login/attemptLogin', // CI route
 			data: {
-				showData: show
+				requestData: {
+					username: $scope.username,
+					password: $scope.password
+				}
 			} //,
 			//user: user->id}//if i know id of user in angluar, I can pass it as a reqest
 		}).then(function (response) {
 			// check response to make sure everything was okay
 			// ...
 
-			//e.target.innerHTML = 'update!';
+			console.log(response);
+			//e.target.innerHTML = 'logged in!';
 			//e.target.className = 'btn btn-success';
 		});
 	};
@@ -769,9 +778,59 @@ app.controller('loginController', function ($scope, $http) {
 });
 
 //user profile page
-app.controller('userController', function ($scope, $routeParams) {
+app.controller('userController', function ($scope, $http) {
 	//if user is logged in, show profile page
+	$scope.user = {};
+	$scope.showList = [];
+	$scope.watchingList = [];
 
+	angular.element(document).ready(function () {
+
+		// get Shows from our database
+		$http({
+			method: 'get',
+			url: app.base_url + 'login/getUser' // CI route
+			
+		}).then(function (response) {
+			console.log(response);
+			$scope.user = response.data;
+
+
+			$scope.getList();
+			console.log($scope.showList);
+		});
+	});
 	
+	$scope.getList = function(){
+		
+		$http({
+			method: 'get',
+			url: app.base_url + 'shows/listShows' // CI route
+			//should pass user id here
+		}).then(function (response) {
+			console.log(response);
+			$scope.showList = response.data.showList;
+			$scope.watchingList = response.data.watchingList;
+			$scope.removedList = response.data.removedList;
+			//$scope.id = response.data.id;
+			$scope.loading = false;
+			
+			console.log($scope.showList);
+
+		
+		
+		/*$scope.showList.forEach(function(s){
+			console.log(s);
+			$scope.loadShowStats(s);
+			
+		});*/
+		
+		console.log($scope.showList);
+		console.log($scope.watchingList);
+	
+});
+		
+	};
+
 
 });

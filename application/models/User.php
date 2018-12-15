@@ -30,7 +30,7 @@ class User extends MY_Model {
 	
 	public function load($username = ''){
 		// query built using CI's query builder
-		$query = $this->db->from('InvestTvUsers')
+		$query = $this->db->from('InvesTvUsers')
 						->where('username', $username)
 						->limit(1)
 						->get();
@@ -111,7 +111,7 @@ class User extends MY_Model {
 	}
 	
 	public static function usernameExists($username){
-		$query = static::db()->from('InvestTvUsers')
+		$query = static::db()->from('InvesTvUsers')
 						->where('username', $username)
 						->get();
 						
@@ -120,7 +120,7 @@ class User extends MY_Model {
 	}
 	
 	public static function emailExists($email){
-		$query = static::db()->from('InvestTvUsers')
+		$query = static::db()->from('InvesTvUsers')
 						->where('email', $email)
 						->get();
 						
