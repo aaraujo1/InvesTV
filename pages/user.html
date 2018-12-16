@@ -1,5 +1,38 @@
 <hr>
 <div class="row">
-<h2>User</h2>
+<h2>User {{user.username}}</h2>
 	Hello, {{user.firstname}} {{user.lastname}}
+	<div>
+	Number of Shows in Collection: {{(showList | removed:false).length}} <br />
+		Number of Shows Watching: {{watchingList.length}} <br />
+		Number of Shows Removed: {{removedList.length}} <br /><br />
+		
+		<table class="table">
+			
+			<tr>
+				<th>#</th>
+				<th></th>
+				<th>Show</th>
+				<th>Total Episodes</th>
+				<th>Episodes Remaining</th>
+				<th>Hours Saved</th>
+			</tr>
+				<tr ng-repeat="show in removedList">
+					<td>{{$index + 1}}</td>
+					<td class=" image-container-small"> <img class="img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}">
+				
+            </td>
+					<td>{{show.title}}</td>
+					<td>{{show.totalEpisodes}}</td>
+					<td>{{show.totalEpisodes - show.totalEpisodesWatched}}</td>
+					<td>{{(show.totalEpisodes - show.totalEpisodesWatched) * (show.runtime | num)}}</td>
+					
+				
+				</tr>
+			
+		</table>
+
+		
+		Number of Shows completed:
+		</div>
 </div>

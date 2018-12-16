@@ -34,13 +34,13 @@ class Login extends MY_Controller {
 		
 		//$this->load->model('User');
 		
-		//$user = new User($requestObject->username);
+		$user = new User($requestObject->username);
 		
-		/*$user->firstname = $requestObject->firstName;
+		$user->firstname = $requestObject->firstName;
 		$user->lastname = $requestObject->lastName;
-		$user->email = $requestObject->email;*/
-		//$user->username = $requestObject->username;
-		//$user->password = $requestObject->password;
+		$user->email = $requestObject->email;
+		$user->username = $requestObject->username;
+		$user->password = $requestObject->password;
 		
 		return $requestObject;
 		
@@ -87,12 +87,12 @@ class Login extends MY_Controller {
 	}
 	
 	//a garbage function for me to get user information 
-	public function getUser(){
+	public function getUser($username){
 		// get form values
 		/*$requestData = file_get_contents('php://input');
 		$userObject = json_decode($requestData);*/
 		
-		$user = new User('aaraujo1');
+		$user = new User($username);
 		
 		echo json_encode($user);
 	}

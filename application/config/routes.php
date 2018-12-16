@@ -63,3 +63,6 @@ $route['shows/remove'] = 'Shows/remove';
 $route['shows/(:any)-(:any)'] = 'Shows/detail/$1';
 $route['login/registerNewUser'] = 'login/registerNewUser';
 
+$route['login/getUser/(:any)'] = 'Login/getUser/$1';
+$route['shows/listShows/(:num)'] = 'Shows/listShows/$1';
+

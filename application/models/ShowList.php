@@ -1,15 +1,10 @@
 <?php
 
-class ShowList extends MY_Model
-implements Iterator {
+class ShowList extends MY_Model {
 
 	//array of show objects
 	public $id, $showList, $watchingList;
 
-
-
-	//For tracking iterations
-	private $position = 0;
 
 	/*---------------------------------*/
 	/*---- SINGLETON DESIGN PATTERN ----*/
@@ -31,8 +26,7 @@ implements Iterator {
 			$this->showList = array(new Show());
 		}*/
 
-
-		$this->position = 0;
+		//initialize arrays
 		$this->showList = array();
 		$this->watchingList = array();
 
@@ -52,64 +46,7 @@ implements Iterator {
 		return self::$instance;
 	}
 
-	/*---------------------------------*/
-	/*---- ITERATOR DESIGN PATTERN ----*/
-	/*---------------------------------*/
-
-	//SOURCE: http://php.net/manual/en/class.iterator.php
-
-	//For tracking iterations
-	//private $position = 0;
-	//private $currentShow;
-
-	/*public function __construct() {
-        $this->position = 0;
-    }*/
-
-	public
-	function setArray( Array $a ) {
-		$this->iterationArray = a;
-	}
-
-	public
-	function getArray() {
-		return $this->iterationArray;
-	}
-
-	//Iterator method: return the position to first postion
-	public
-	function rewind() {
-		$this->position = 0;
-		$this->next();
-	}
-
-	//Iterator method: increment position
-	public
-	function next() {
-		++$this->position;
-	}
-
-	//Iterator method: return current value
-	public
-	function current() {
-		return $this->showList[ $this->position ];
-	}
-
-	//Iterator method: return current key
-	public
-	function key() {
-		return $this->position;
-	}
-
-	//Iterator method: return boolean if value is indexed at position
-	public
-	function valid() {
-		//return isset($this->showList[$this->position]);
-		return $this->position < count( $this->showList );
-	}
-
-	/*---------------------------------*/
-	/*---------------------------------*/
+	
 
 	/*---------------------------------------------*/
 	/*----- methods to manage this collection -----*/
@@ -155,7 +92,7 @@ implements Iterator {
 		}*/
 
 
-		$this->watchingList = array();
+		//$this->watchingList = array();
 
 		if ( $watchingListObject ) {
 			foreach ( $watchingListObject as $o ) {
@@ -172,9 +109,6 @@ implements Iterator {
 		//$this->object = $row->object;
 	}
 
-
-
-	//public function save(){
 	public
 	function save() {
 		// do some validation here
@@ -228,7 +162,7 @@ implements Iterator {
 	}
 
 	public
-	function delete($showObject) {
+	function delete( Show $showObject) {
 		/*if($this->id){
 			// delete
 			$this->db->delete('investv', array('id' => $this->id));
@@ -250,8 +184,7 @@ implements Iterator {
 	}
 
 	public
-
-	function addShow( $showObject ) {
+	function addShow( Show $showObject ) {
 		//flag if adding succeeded
 		$adding = false;
 		$duplicate = false;
@@ -326,7 +259,7 @@ implements Iterator {
 	}
 
 	public
-	function removeShow( $showObject ) {
+	function removeShow(Show $showObject ) {
 		//$element;
 		//find object in array
 		/*foreach($this->showList as $showKey => $show){
@@ -359,7 +292,7 @@ implements Iterator {
 	}
 	
 	public
-	function addWatching( $showObject ) {
+	function addWatching( Show $showObject ) {
 
 		$showKey = 0;
 		//find object in array
@@ -381,7 +314,7 @@ implements Iterator {
 
 	}
 	
-	public function removeWatching ( $showObject ){
+	public function removeWatching ( Show $showObject ){
 		$showKey = 0;
 		//find object in array
 		foreach ( $this->watchingList as $show ) {
@@ -402,7 +335,7 @@ implements Iterator {
 	}
 
 	public
-	function update( $showObject ) {
+	function update( Show $showObject ) {
 		//find object in array
 		foreach ( $this->watchingList as $show ) {
 			//match title
@@ -417,7 +350,7 @@ implements Iterator {
 		}
 	}
 
-	public static
+	/*public static
 	function getList() {
 		$db = self::db();
 
@@ -428,10 +361,7 @@ implements Iterator {
 
 		return $result;
 	}
-
-	/*public
-function __toString() {
-	return $this->title;
-}*/
+*/
+	
 
 }

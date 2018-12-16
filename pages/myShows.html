@@ -20,7 +20,7 @@
 				id="line" class="chart chart-line" chart-data="show.ratingsArray"
 				chart-labels="show.episodeListArray" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick"
-				chart-colors="Yellow"> </canvas>
+				chart-colors="colors"> </canvas>
             </div>
           </div>
         </div>
@@ -87,11 +87,11 @@
       </div>
     
     <hr>
-    <h1>Show Collection: {{showList.length}}</h1>
+    <h1>Show Collection: {{(showList | removed:false).length}}</h1>
     
       <div class="row">
-        <div ng-repeat="show in showList">
-			<div ng-if="!show.flagRemove">
+        <!--<div ng-repeat="show in showList" ng-if="!show.flagRemove">-->
+			<div ng-repeat="show in showList | removed:false">
 			 <div class="clearfix" ng-if="$index % 2 == 0"></div>
 			<div class="show">
           <div class="col col-sm-2">
@@ -109,7 +109,7 @@
             <button class="btn btn-warning" ng-disabled="watchingList.length == 3 " ng-click="addWatching(show, $event)" title="Add {{show.title}} to your watching list">Watch Now!</button><br />
 			  <button class="btn black-background" ng-click="delete(show, $event)" title="Delete {{show.title}} from records">Remove</button>
           </div>
-          </div>
+          
         </div>
       </div>
 		

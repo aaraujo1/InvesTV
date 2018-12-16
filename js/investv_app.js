@@ -22,9 +22,36 @@ app.run(function ($rootScope, $location) {
 	};
 });
 
+//filter to return integer from string and remove extra string
 app.filter('num', function () {
 	return function (input) {
 		return parseInt(input.substring(0, input.length - 4), 10);
+	};
+});
+
+//filter to get only shows that haven't been marked as removed
+//SOURCE: https://stackoverflow.com/questions/20858395/how-to-use-ng-repeat-with-filter-and-index
+app.filter('removed', function(){
+	return function(data, parameter){
+		var removed=[];
+		for(var i=0; i < data.length; i++){
+			if(data[i].flagRemove === parameter){
+				removed.push(data[i]);
+			}
+		}
+		return removed;
+	};
+});
+
+app.filter('filterList', function(){
+	return function(data, pKey, pValue){
+		var filtered=[];
+		data.forEach(function(element){
+			if(element.pKey === pValue){
+				filtered.push(element);
+			}
+		});
+		return filtered;
 	};
 });
 
@@ -65,15 +92,15 @@ app.config(function ($routeProvider) {
 	})
 
 	//user profile page
-	/*.when('/User/:userName', {
-		templateUrl: 'pages/user.html',
-		controller: 'userController',
-	});*/
-	
-	.when('/User/User', {
+	.when('/User/:username', {
 		templateUrl: 'pages/user.html',
 		controller: 'userController',
 	});
+	
+	/*.when('/User/User', {
+		templateUrl: 'pages/user.html',
+		controller: 'userController',
+	});*/
 
 });
 
@@ -407,12 +434,13 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 //my show list
 app.controller('myShowsController', function ($scope, $http) {
 	$scope.loading = true;
-	$scope.id = '';
 	$scope.showList = [];
 	$scope.watchingList = [];
 	$scope.removedList = [];
 	$scope.currentEpisodeName = '';
 	$scope.remainingRating = '0';
+	$scope.user = {};
+	//$scope.colors = ["#f0ad4e"];
 
 	//chart data and labels
 	//$scope.labels = [...Array(200).keys()];
@@ -422,7 +450,7 @@ app.controller('myShowsController', function ($scope, $http) {
 		// get Shows from our database
 		$http({
 			method: 'get',
-			url: app.base_url + 'shows/listShows' // CI route
+			url: app.base_url + 'shows/listShows/' + 1 // CI route
 		}).then(function (response) {
 			console.log(response);
 			$scope.showList = response.data.showList;
@@ -689,12 +717,8 @@ app.controller('registerController', function ($scope, $http) {
 	$scope.password = "";
 	$scope.repeat_password = "";
 
-	$scope.registerNewUser = function (e) {
-		$scope.user = {
-
-		};
-		console.log($scope.user);
-
+	$scope.registerNewUser = function () {
+		
 		$http({
 			method: 'post',
 			url: app.base_url + 'login/registerNewUser', // CI route
@@ -711,35 +735,12 @@ app.controller('registerController', function ($scope, $http) {
 			// check response to make sure everything was okay
 			// ...
 
-			e.target.innerHTML = 'registered!';
-			e.target.className = 'btn btn-success';
+			document.getElementById("submit").innerHTML = 'registered!';
+			document.getElementById("submit").className = 'btn btn-success btn-lg btn-block';
 			
 			console.log(response);
 		});
 	};
-
-
-	//post to database
-	/*$scope.updateList = function (show) {
-		//e.target.innerHTML = 'Adding...';
-		//e.target.classname = 'btn btn-primary';
-
-		$http({
-			method: 'post',
-			url: app.base_url + 'shows/update', // CI route
-			data: {
-				showData: show
-			} //,
-			//user: user->id}//if i know id of user in angluar, I can pass it as a reqest
-		}).then(function (response) {
-			// check response to make sure everything was okay
-			// ...
-
-			//e.target.innerHTML = 'update!';
-			//e.target.className = 'btn btn-success';
-		});
-	};*/
-
 });
 
 //login user
@@ -778,57 +779,71 @@ app.controller('loginController', function ($scope, $http) {
 });
 
 //user profile page
-app.controller('userController', function ($scope, $http) {
+app.controller('userController', function ($scope, $http, $routeParams) {
 	//if user is logged in, show profile page
 	$scope.user = {};
 	$scope.showList = [];
 	$scope.watchingList = [];
+	$scope.removedList = [];
+	
 
 	angular.element(document).ready(function () {
 
 		// get Shows from our database
 		$http({
 			method: 'get',
-			url: app.base_url + 'login/getUser' // CI route
+			url: app.base_url + 'login/getUser/' + $routeParams.username // CI route
 			
 		}).then(function (response) {
 			console.log(response);
+			
 			$scope.user = response.data;
-
+			console.log($scope.user);
 
 			$scope.getList();
-			console.log($scope.showList);
+			//console.log($scope.showList);
+			
+			
 		});
 	});
 	
-	$scope.getList = function(){
-		
-		$http({
+	$scope.getList = function () {
+
+		return $http({
 			method: 'get',
-			url: app.base_url + 'shows/listShows' // CI route
-			//should pass user id here
+			url: app.base_url + 'shows/listShows/' + $scope.user.id // CI route
+				//should pass user id here
 		}).then(function (response) {
 			console.log(response);
 			$scope.showList = response.data.showList;
 			$scope.watchingList = response.data.watchingList;
-			$scope.removedList = response.data.removedList;
-			//$scope.id = response.data.id;
-			$scope.loading = false;
 			
-			console.log($scope.showList);
+			
+			$scope.getRemovedList();
 
-		
-		
-		/*$scope.showList.forEach(function(s){
-			console.log(s);
-			$scope.loadShowStats(s);
 			
-		});*/
+
+			console.log($scope.showList);
+			console.log($scope.watchingList);
+			console.log($scope.removedList);
+
+			
+		});
+			
+			
+			
 		
-		console.log($scope.showList);
-		console.log($scope.watchingList);
-	
-});
+		
+		
+
+	};
+
+	$scope.getRemovedList = function () {
+		$scope.showList.forEach(function (element) {
+			if (element.flagRemove) {
+				$scope.removedList.push(element);
+			}
+		});	
 		
 	};
 

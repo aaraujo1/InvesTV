@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends MY_Model {
-	public $id = 0;
+	public $id = '';
 	public $firstname = '';
 	public $lastname = '';
 	public $username = '';
@@ -17,7 +17,7 @@ class User extends MY_Model {
 	public function __construct($username = '')
 	{
 		// Call the CI_Model constructor
-		parent::__construct();
+		//parent::__construct();
 	
 		if($username){
 			$this->load($username);
@@ -63,27 +63,28 @@ class User extends MY_Model {
 					'username' => $this->username,
 					'password' => $this->password);
 		
-		echo 'saving';
-		$this->db->insert('InvesTvUsers', $data);
-		echo 'saved';
-		// if it has an ID, it already exists, so we will update
-//		if($this->id){
-//			return $this->db->where('id', $this->id)
-//							->update('InvestTvUsers', $data);		
-//		// else, it doesn't exist, so create a new one	
-//		}else{
-//			/*if($this->db->insert('InvestTvUsers', $data)){
-//			
-//				// since we are creating a new city, we will want to know the ID that was generated
-//				$this->id = $this->db->insert_id('id');
-//				return true;
-//			}*/
-//			$this->db->insert('InvestTvUsers', $data);
-//			
-//		}
-//		
-//		return false;
-//		
+		
+		 //if it has an ID, it already exists, so we will update
+		if($this->id){
+			return $this->db->where('id', $this->id)
+							->update('InvesTvUsers', $data);		
+		// else, it doesn't exist, so create a new one	
+			
+		}else{
+			echo 'saving';
+			if($this->db->insert('InvesTvUsers', $data)){
+			
+				// since we are creating a new user, we will want to know the ID that was generated
+				$this->id = $this->db->insert_id('id');
+				return true;
+			}
+			
+			echo 'saved';
+			
+		}
+		
+		return false;
+		
 	}
 	
 	public function setPassword($password){
