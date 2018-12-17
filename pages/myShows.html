@@ -25,13 +25,21 @@
           </div>
         </div>
         <br />
+		  
         <div class="row">
           <div class="col col-sm-4"> <strong>Total Episodes: </strong>{{show.totalEpisodes}} <br />
             <strong>Remaining Episodes: </strong>{{show.totalEpisodes - show.totalEpisodesWatched}} <br />
-			  <strong>Remaining Minutes: </strong>{{(show.totalEpisodes - show.totalEpisodesWatched) * (show.Runtime | num)}} <br />
+			  <strong>Remaining Minutes: </strong>{{((show.totalEpisodes - show.totalEpisodesWatched) * (show.Runtime | num)) | numberWithCommas}} <br />
             <strong>Show Rating: </strong>{{show.imdbRating}} <br />
             <strong>Average Episode Rating: </strong>{{show.episodeRatings}}<br />
-            <strong>Average Rating of Remaining Episodes: </strong>{{remainingRating(show)}}<br />
+            <strong>Average Rating of Remaining Episodes: </strong>{{remainingRating(show)}}
+			  
+			  <span class="glyphicon glyphicon-arrow-up" ng-if="remainingRating(show) > show.episodeRatings" style="color: #5cb85c"></span>
+			  <span class="glyphicon glyphicon-arrow-down" ng-if="remainingRating(show) < show.episodeRatings" style="color: #d9534f"></span>
+			  
+			  <br />
+			  within {{stdDev(remainingRating(show), show)}} standard deviation <br />
+			  <div ng-if="stdDev(remainingRating(show), show) <= -2" style="color: #d9534f">Do you have Stockholm syndrome with this show? <br />Maybe it's time to stop watching.</div>
 			  <strong>Number of Outliers: </strong>{{show.stats.outliers}} (<span class="glyphicon glyphicon-arrow-down" style="color:#d9534f"></span>{{show.stats.lowerOutliers.length}} / <span class="glyphicon glyphicon-arrow-up" style="color:#5cb85c"></span>{{show.stats.upperOutliers.length}})<br />
             
             <!--			TODO: if Rating of Remaining Episodes drops too much below Average Episode Rating, warn user--> 
@@ -41,21 +49,39 @@
           </a>--> 
             
           </div>
+			<div class="col col-sm-3 text-right"> 
+            <!--Current Episode: {{parseInt(show.episode)}} <br />--> 
+            <strong>Current Season: </strong>{{show.currentSeason-0+1}} <br />
+            
+            
+            <strong>Season Rating: </strong>{{show.Seasons[show.currentSeason].seasonRatingAverage | number: 2}} <br />
+				within {{stdDev(show.Seasons[show.currentSeason].seasonRatingAverage, show)}} standard deviation <br />
+			<strong>Remaining Seasons: </strong>{{show.totalSeasons - show.currentSeason-1}} <br />
+				
+			  <!--<strong>σ: </strong>-->
+
+            
+            <!--			TODO: SHOW/HIDE if current episode if best or worst--> 
+            
+            <!--<div ng-repeat="season in show.object.Seasons | filter:{Season:'1'}">
+			 {{season.Episodes[show.episode].Title}}</div>
+			{{show.object.Seasons[1].Episodes[show.episode].Title}}--> 
+          </div>
 			
-          <div class="col col-sm-6 text-right"> 
+          <div class="col col-sm-3 text-right"> 
             <!--Current Episode: {{parseInt(show.episode)}} <br />--> 
             <strong>Current Season: </strong>{{show.currentSeason-0+1}} <br />
             <strong>Current Episode: </strong>{{show.currentEpisode-0+1}} <br />
             <em>{{show.Seasons[show.currentSeason].Episodes[show.currentEpisode].Title}}</em> <br />
             <strong>Episode Rating: </strong>{{show.Seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating}} <br />
-			  <!--<strong>σ: </strong>-->{{stdDev(show)}} standard deviation <br />
+			  <!--<strong>σ: </strong>-->within {{stdDev(show.Seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating, show)}} standard deviation <br />
             
             <!--<div ng-hide="outlier">-->
-			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.bestEpisode">This is the best episode! </div>
-            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating > show.stats.upperLimit">This episode is an outlier. It's REALLY good!! <br />Like, damn... what the hell did I just watch, good.</div>
+			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.bestEpisode" style="color: #5cb85c">This is the best episode! </div>
+            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating > show.stats.upperLimit" style="color: #5cb85c">This episode is an outlier. It's REALLY good!! <br />Like, damn... what the hell did I just watch, good.</div>
             
-			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.worstEpisode"> This is the worst episode! </div>
-            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating < show.stats.lowerLimit"> This episode is an outlier. It's THAT bad. <br />Like, shouldn't even be considered an episode, bad.</div>
+			  <div ng-if="show.episodeListArray[show.totalEpisodesWatched] == show.worstEpisode" style="color: #d9534f"> This is the worst episode! </div>
+            <div ng-if="show.seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating < show.stats.lowerLimit" style="color: #d9534f"> This episode is an outlier. It's THAT bad. <br />Like, shouldn't even be considered an episode, bad.</div>
             
             <!--			TODO: SHOW/HIDE if current episode if best or worst--> 
             
@@ -113,10 +139,11 @@
             <strong>Total Episodes: </strong>{{show.totalEpisodes}} <br />
             <strong>Show Rating: </strong>{{show.imdbRating}} <br />
 			  <strong>Number of Outliers: </strong>{{show.stats.outliers}} (<span class="glyphicon glyphicon-arrow-down" style="color:#d9534f"></span>{{show.stats.lowerOutliers.length}} / <span class="glyphicon glyphicon-arrow-up" style="color:#5cb85c"></span>{{show.stats.upperOutliers.length}}) <br />
-            <button  class="btn btn-danger"  ng-click="removeFromCollection(show, $event)" title="Remove {{show.Title}} to your collection">Stop Watching</button>
-			  
-            <button class="btn btn-warning" ng-disabled="watchingList.length == 3 " ng-click="addWatching(show, $event)" title="Add {{show.Title}} to your watching list">Watch Now!</button><br />
-			  <button class="btn black-background" ng-click="delete(show, $event)" title="Delete {{show.Title}} from records">Remove</button>
+            
+			  <a type="button" class="btn btn-default" href="#!/Show/{{show.Title}}"> Details</a>
+              <button class="btn btn-warning" ng-disabled="watchingList.length == 3 " ng-click="addWatching(show, $event)" title="Add {{show.Title}} to your watching list">Watch Now!</button><br />
+			  <button  class="btn btn-danger"  ng-click="removeFromCollection(show, $event)" title="Remove {{show.Title}} to your collection">Stop Watching</button>
+			  <button class="btn black-background" ng-click="delete(show, $event)" title="Delete {{show.Title}} from records">Delete</button>
           </div>
           
         </div>

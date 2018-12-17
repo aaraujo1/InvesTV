@@ -1,50 +1,72 @@
 <hr>
-<div class="row">
 <h2>User {{user.username}}</h2>
-	Hello, {{user.firstname}} {{user.lastname}}
-	<div>
-	Number of Shows in Collection: {{(showList | removed:false).length}} <br />
-		Number of Shows Watching: {{watchingList.length}} <br />
-		Number of Shows Stopped Watching: {{removedList.length}} <br /><br />
-		
-		<table class="table">
-			<thead>
-			<tr>
-				<th>#</th>
-				<th></th>
-				<th>Show</th>
-				<th>Total Episodes</th>
-				<th>Episodes Remaining</th>
-				<th>Minutes Saved</th>
-			</tr>
-				</thead>
-			<tbody>
-				<tr ng-repeat="show in removedList">
-					<td>{{$index + 1}}</td>
-					<td class=" image-container-small"> <img class="img-rounded" ng-src="{{show.Poster}}" alt="{{show.Title}}">
-				
-            </td>
-					<td>{{show.Title}}</td>
-					<td>{{show.totalEpisodes}}</td>
-					<td>{{show.totalEpisodes - show.totalEpisodesWatched}}</td>
-					<td>{{(show.totalEpisodes - show.totalEpisodesWatched) * (show.Runtime | num)}}</td>
-					
-				
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>	
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th>Total</th>
-					<th>{{sumMinutes()}}</th>
-				</tr>
-			</tfoot>
-		</table>
+<div class="row">
+	
+  <div class="col col-sm-6 col-xs-6">
+    
+    <h3>Hello, {{user.firstname}} {{user.lastname}}</h3>
+    <div> 
+		<strong>Number of Shows in Collection: </strong>{{(showList | removed:false).length}} <br />
+      <strong>Number of Shows Watching: </strong>{{watchingList.length}} <br />
+      <strong>Number of Shows Stopped Watching: </strong>{{removedList.length}} 
 
-		
-		<!--Number of Shows completed:-->
+    </div>
+	  </div>
+    <div class="col col-sm-6 col-xs-6">
+		<div style="font-size: 100px;" class="pull-right">{{getNestEgg()}}
 		</div>
+	</div>
+	
+  </div>
+<div class="row">
+<div class="col col-sm-2"></div>
+	<div class="col col-sm-8">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="hidden-xs">#</th>
+        <th class="hidden-xs"></th>
+        <th style="text-align: left">Show</th>
+        <th class="hidden-xs">Total<br />Episodes</th>
+        <th class="hidden-xs">Episodes<br />Remaining</th>
+        <th>Minutes<br />Saved</th>
+		  <th class="hidden-xs"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="show in removedList">
+        <td class="hidden-xs">{{$index + 1}}</td>
+        <td class="image-container-table hidden-xs"><img class="img-rounded" ng-src="{{show.Poster}}" alt="{{show.Title}}"></td>
+        <td style="text-align: left">{{show.Title}}</td>
+        <td class="hidden-xs">{{show.totalEpisodes}}</td>
+        <td class="hidden-xs">{{show.totalEpisodes - show.totalEpisodesWatched}}</td>
+        <td>{{((show.totalEpisodes - show.totalEpisodesWatched) * (show.Runtime | num)) | numberWithCommas}}</td>
+		  <td class="hidden-xs"><button class="btn black-background" ng-click="delete(show, $event)" title="Delete {{show.Title}} from records">Delete</button></td>
+        <!--Number of Shows completed:--> 
+        
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th class="hidden-xs"></th>
+        <th class="hidden-xs"></th>
+        <th></th>
+        <th class="hidden-xs"></th>
+        <th class="hidden-xs">Total</th>
+        <th>{{sumMinutes() | numberWithCommas}}</th>
+		<th class="hidden-xs"></th>
+      </tr>
+    </tfoot>
+  </table>
+		</div>
+<div class="col col-sm-2"></div>
 </div>
+<div class="row">
+	<div class="col col-sm-2"></div>
+	<div class="col col-sm-8" style="text-align: right; font-size: 1.5em">
+
+	With this time, you could {{minutes()}}.
+	</div>
+	<div class="col col-sm-2"></div>
+</div>
+<hr>

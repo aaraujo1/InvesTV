@@ -10,11 +10,12 @@
 
 <div class="row">
 	<div class="col col-md-6 text-center">
-    	
-        
-		<img class="img-responsive img-rounded" ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.title}}"><br />
-		
-		
+    	<div class="img-responsive image-container">
+			
+		<img class="img-rounded"  ng-src="{{show.Poster}}" title="{{show.Title}} #{{show.imdbID}}" alt="{{show.Title}}">
+				
+			
+			</div>
 	</div>
 	<div class="col col-md-6">
 		<strong>Plot: </strong>{{show.Plot}}<br />

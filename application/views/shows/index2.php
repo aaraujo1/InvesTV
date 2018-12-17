@@ -38,7 +38,24 @@
         </div>
       </div>
 	-->
+	
+		
     <div class="container">
+<div class="row">
+	
+	<div class="col col-xs-12">
+		<div class="pull-right">
+
+			<a href="#!/User/aaraujo1" class="btn btn-default" role="button">
+					<span class="glyphicon glyphicon-user"></span> Hello, aaraujo1
+				</a>
+		
+
+
+
+		</div>
+	</div>
+		</div>
     <div class="row">
         <div class="col col-sm-12 text-center">
 			<a href="#" ng-click="clear()">
@@ -92,9 +109,17 @@
 <!--Angular-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-route.min.js"></script>
+
+<!--Angular Match Media-->
+<!-- https://github.com/jacopotarantino/angular-match-media -->
+<script type='text/javascript' src='/static/path/to/angular-media-queries/match-media.js'></script>
+
+<!--Angular Charts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js"></script>
 <script src="<?= base_url('js/angular-chart.min.js') ?>"></script>
+
+<!--MathJS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js"></script>
 
 <script src="<?= base_url('js/investv_app.js') ?>"></script>
 

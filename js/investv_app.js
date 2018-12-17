@@ -55,6 +55,14 @@ app.filter('filterList', function(){
 	};
 });
 
+//number with commas using REGEX
+//SOURCE: https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+app.filter('numberWithCommas', function(){
+	return function(x) {
+    	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
+});
+
 // configure our routes
 app.config(function ($routeProvider) {
 	$routeProvider
@@ -717,6 +725,7 @@ app.controller('myShowsController', function ($scope, $http) {
 		});
 	};
 	
+	//sort list alphabetically
 	$scope.sortAlpha = function () {
 
 		// get Shows from our database
@@ -740,10 +749,15 @@ app.controller('myShowsController', function ($scope, $http) {
 				$scope.sortAlphaOrder = 'ascending';
 			}
 			
+			//reset color of other sorter
+			document.getElementById("sortNumDown").style = '';
+			document.getElementById("sortNumUp").style = '';
+			
 		});
 
 	};
 	
+	//sort list numerically
 	$scope.sortNum = function () {
 
 		// get Shows from our database
@@ -755,7 +769,7 @@ app.controller('myShowsController', function ($scope, $http) {
 			$scope.showList = response.data.showList;
 			console.log($scope.showList);
 
-			//$scope.sortNumOrder = $scope.sortNumOrder === 'ascending' ? 'descending' :  'ascending';
+			//change order value and change arrow color
 			if($scope.sortNumOrder === 'ascending'){
 				document.getElementById("sortNumDown").style = 'color: #0275d8';
 				document.getElementById("sortNumUp").style = '';
@@ -767,13 +781,18 @@ app.controller('myShowsController', function ($scope, $http) {
 				$scope.sortNumOrder = 'ascending';
 			}
 			
+			//reset color of other sorter
+			document.getElementById("sortAlphaUp").style = '';
+			document.getElementById("sortAlphaDown").style = '';
+			
 		});
 
 	};
 	
-	$scope.stdDev = function(show){
+	//sort list alphabetically
+	$scope.stdDev = function(rating, show){
 		//var multiplier = 1;
-		var rating = show.Seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating;
+		//var rating = show.Seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating;
 		
 		if(rating === show.episodeRatings){
 			//0 deviation
@@ -781,22 +800,23 @@ app.controller('myShowsController', function ($scope, $http) {
 		}else if(rating < show.episodeRatings){
 			//negative deviation
 			if (rating > show.episodeRatings - show.stats.standardDeviation){
-				return 'within -1';
+				return -1;
 			}else if(rating > show.episodeRatings - (2*show.stats.standardDeviation)){
-				return 'within -2';	 
+				return -2;	 
 			}else if(rating > show.episodeRatings - (3*show.stats.standardDeviation)){
-				return 'within -3';
+				return -3;
 			}else{
 				return 'more than -3';
 			}
 		}else{
 			//positive deviation
-			if (rating < show.episodeRatings + show.stats.standardDeviation){
-				return 'within 1';
-			}else if(rating < show.episodeRatings + (2*show.stats.standardDeviation)){
-				return 'within 2';	 
-			}else if(rating < show.episodeRatings + (3*show.stats.standardDeviation)){
-				return 'within 3';
+			//-0 to make into number
+			if (rating < show.episodeRatings - 0 + show.stats.standardDeviation){
+				return 1;
+			}else if(rating < show.episodeRatings - 0 + (2*show.stats.standardDeviation)){
+				return 2;	 
+			}else if(rating < show.episodeRatings - 0 + (3*show.stats.standardDeviation)){
+				return 3;
 			}else{
 				return 'more than 3';
 			}
@@ -884,6 +904,10 @@ app.controller('userController', function ($scope, $http, $routeParams) {
 	$scope.showList = [];
 	$scope.watchingList = [];
 	$scope.removedList = [];
+	$scope.sumMin = 0;
+	$scope.nestEgg = '';
+	
+	
 	
 
 	angular.element(document).ready(function () {
@@ -945,6 +969,29 @@ app.controller('userController', function ($scope, $http, $routeParams) {
 		});	
 		
 	};
+	
+	//delete show completely
+	$scope.delete = function (show, e){
+		e.target.innerHTML = 'Deleting...';
+		
+		// remove from database
+		$http({
+			method: 'post',
+			url: app.base_url + 'shows/delete/', // CI route
+			data: {
+				showData: show
+			}
+		}).then(function (response) {
+			// check response to make sure everything was okay
+			// ...
+			console.log(response);
+
+			// remove from local array
+			var index = $scope.removedList.indexOf(show);
+			$scope.removedList.splice(index, 1);
+		});
+	};
+	
 
 	$scope.sumMinutes = function(){
 		var minutes = [];
@@ -953,7 +1000,48 @@ app.controller('userController', function ($scope, $http, $routeParams) {
 			minutes.push((show.totalEpisodes - show.totalEpisodesWatched) * parseFloat(show.Runtime.substring(0, show.Runtime.length - 1)));
 		});
 		
-		return math.sum(minutes);
+		$scope.sumMin = math.sum(minutes);
+		
+		return $scope.sumMin;
+	};
+	
+	$scope.getNestEgg = function(){
+		//SOURCE: https://stackoverflow.com/questions/6665997/switch-statement-for-greater-than-less-than
+		//if statements are faster than switch
+		if ($scope.sumMin < 10000) {
+			$scope.nestEgg = '🥚';
+		}else if ($scope.sumMin < 100000){
+			$scope.nestEgg = '🐣';
+		}else if ($scope.sumMin < 1000000){
+			$scope.nestEgg = '🐥';
+		}else if ($scope.sumMin < 10000000){
+			$scope.nestEgg = '🐓';
+		}else{
+			$scope.nestEgg = '🍗';
+		}
+		return $scope.nestEgg;
+	};
+	
+	$scope.minutes = function () {
+
+	console.log($scope.sumMin);
+
+	if ($scope.sumMin > 115200) {
+		return 'travel around the world in 80 days';
+	} else if ($scope.sumMin > 1440) {
+		return 'orbit the sun';
+	}else if ($scope.sumMin > 400) {
+		return 'drive to Nashville and sign a record deal';
+	}else if ($scope.sumMin > 160) {
+		return 'go see the full production of Les Misérables';
+	} else if ($scope.sumMin > 60) {
+		return 'go see Les Misérables';
+	} else if ($scope.sumMin >30) {
+		return 'bake cookies';
+	} else {
+		return 'watch an episode of your favorite TV show';
+	}
+
 	};
 
-});
+	});

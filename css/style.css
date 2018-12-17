@@ -3,10 +3,32 @@ body {
     color: #CCC;
 	margin:10px;
 }
+
+/*images will go in a container*/
+img{
+	width: 100%;
+    height: 100%;
+}
+
+button, input, a{
+	margin: 5px 0;
+}
+
+.table thead tr th, .table tbody tr td, .table tfoot tr th{
+	text-align: center;
+	font-size: 2em;
+}
+
+.table tbody tr td{
+	vertical-align: middle;
+}
+
+
 /*for whole page*/
 .container {
     /*padding: 10px;*/
 }
+
 .img-responsive {
     margin: 0 auto;
     display: block;
@@ -16,6 +38,7 @@ body {
     margin-top: 30px;
     margin-bottom: 30px;
     height: 200px;
+	width: 243px;
 }
 
 /* forms */
@@ -28,43 +51,43 @@ body {
 	margin-top: 10px;
 }
 
-
-.image-container img {
-    width: 100%;
-    height: 100%;
+/*-- container for show title, image, button, etc. --*/
+.show{
+	margin: 10px 0;
 }
 
+
+/*----------------------*/
+/*-- image containers --*/
+/*----------------------*/
+
+/*- main, search, detail, list pages (watching) -*/
 .image-container {
     height: 450px;
     width: 300px;
 }
 
+/*- list page (collection) -*/
 .image-container-small {
     height: 200px;
     width: 133px;
-	
 }
 
-.image-container-small img {
-    width: 100%;
-    height: 100%;
+/*- user page -*/
+.image-container-table {
+    height: 100px;
+    width: 66px;
 }
 
-.show{
-	margin: 10px 0;
-}
 
-button, input {
-	margin: 5px 0;
-}
+
+
 .black-background {background-color:#000000;}
 .black-background:hover {background-color:#cccccc;}
 
-/*.chart-container canvas{
-	height: 300px;
-}*/
-
-
+/*-----------------------*/
+/*-- responsive styles --*/
+/*-----------------------*/
 
 @media screen and (max-width: 768px) {
 	.image-container {
@@ -76,7 +99,7 @@ button, input {
     height: 100px;
     width: 66px;
 	
-}	
+	}	
 }
 
 @media screen and (max-width: 992px) {
