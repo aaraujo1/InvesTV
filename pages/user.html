@@ -5,34 +5,46 @@
 	<div>
 	Number of Shows in Collection: {{(showList | removed:false).length}} <br />
 		Number of Shows Watching: {{watchingList.length}} <br />
-		Number of Shows Removed: {{removedList.length}} <br /><br />
+		Number of Shows Stopped Watching: {{removedList.length}} <br /><br />
 		
 		<table class="table">
-			
+			<thead>
 			<tr>
 				<th>#</th>
 				<th></th>
 				<th>Show</th>
 				<th>Total Episodes</th>
 				<th>Episodes Remaining</th>
-				<th>Hours Saved</th>
+				<th>Minutes Saved</th>
 			</tr>
+				</thead>
+			<tbody>
 				<tr ng-repeat="show in removedList">
 					<td>{{$index + 1}}</td>
-					<td class=" image-container-small"> <img class="img-rounded" ng-src="{{show.poster}}" alt="{{show.title}}">
+					<td class=" image-container-small"> <img class="img-rounded" ng-src="{{show.Poster}}" alt="{{show.Title}}">
 				
             </td>
-					<td>{{show.title}}</td>
+					<td>{{show.Title}}</td>
 					<td>{{show.totalEpisodes}}</td>
 					<td>{{show.totalEpisodes - show.totalEpisodesWatched}}</td>
-					<td>{{(show.totalEpisodes - show.totalEpisodesWatched) * (show.runtime | num)}}</td>
+					<td>{{(show.totalEpisodes - show.totalEpisodesWatched) * (show.Runtime | num)}}</td>
 					
 				
 				</tr>
-			
+			</tbody>
+			<tfoot>
+				<tr>	
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>Total</th>
+					<th>{{sumMinutes()}}</th>
+				</tr>
+			</tfoot>
 		</table>
 
 		
-		Number of Shows completed:
+		<!--Number of Shows completed:-->
 		</div>
 </div>

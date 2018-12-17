@@ -137,6 +137,7 @@ class Shows extends MY_Controller {
 		
 	}
 	
+	//update show
 	public function update(){
 		// if using angularJS $http post, use something like
 		$requestData = file_get_contents('php://input');
@@ -156,5 +157,30 @@ class Shows extends MY_Controller {
 		$showList->save();
 		
 	}
+	
+	//sort list
+	public function sortListAlpha($order){
+		
+		//singleton instance
+		$showList = ShowList::getInstance(1);
+		
+		//strategyPattern
+		$showList->sortList(new TitleSortStrategy('Title', $order));
+		
+		echo json_encode($showList);
+	}
+	
+	//sort list
+	public function sortListNum($order){
+		
+		//singleton instance
+		$showList = ShowList::getInstance(1);
+		
+		//strategyPattern
+		$showList->sortList(new RatingSortStrategy('imdbRating', $order));
+		
+		echo json_encode($showList);
+	}
+	
 	
 }

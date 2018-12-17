@@ -59,7 +59,7 @@ class ShowList extends MY_Model {
 		//		$this->showList = json_decode($row->showList);
 		$showListObject = json_decode( $row->showList );
 		$watchingListObject = json_decode( $row->watchingList );
-		$removedList = json_decode( $row->removedList );
+		//$removedList = json_decode( $row->removedList );
 
 
 		//TODO: Remove this because JSON objects are now stored as show objects in DB
@@ -173,7 +173,7 @@ class ShowList extends MY_Model {
 		foreach ( $this->showList as $show ) {
 			//match title
 
-			if ( $show->title === $showObject->title ) {
+			if ( $show->Title === $showObject->Title ) {
 				//remove show from showList
 				//$element = $showKey;
 				unset( $this->showList[ $showKey ] );
@@ -197,7 +197,7 @@ class ShowList extends MY_Model {
 			//check if show already exists in list
 			foreach ( $this->showList as $show ) {
 				//match title
-				if ( $show->title === $showObject->title ) {
+				if ( $show->Title === $showObject->Title ) {
 					//match found
 					$duplicate = true;
 					
@@ -224,7 +224,7 @@ class ShowList extends MY_Model {
 				//check if show already exists in watchList
 			foreach ( $this->watchList as $show ) {
 				//match title
-				if ( $show->title === $showObject->title ) {
+				if ( $show->Title === $showObject->Title ) {
 					//match found
 					$duplicate = true;
 					//else result: $adding = false && $duplicate = true;
@@ -279,7 +279,7 @@ class ShowList extends MY_Model {
 		foreach ( $this->showList as $show ) {
 			//match title
 
-			if ( $show->title === $showObject->title ) {
+			if ( $show->Title === $showObject->Title ) {
 				//remove show from showList
 				//$element = $showKey;
 				$show->flagRemove = true;
@@ -289,6 +289,7 @@ class ShowList extends MY_Model {
 		}
 
 		//unset($this->showList[$element]);
+		
 	}
 	
 	public
@@ -299,7 +300,7 @@ class ShowList extends MY_Model {
 		foreach ( $this->showList as $show ) {
 			//match title
 
-			if ( $show->title === $showObject->title ) {
+			if ( $show->Title === $showObject->Title ) {
 				//remove show from showList
 				//$element = $showKey;
 				unset( $this->showList[ $showKey ] );
@@ -320,7 +321,7 @@ class ShowList extends MY_Model {
 		foreach ( $this->watchingList as $show ) {
 			//match title
 
-			if ( $show->title === $showObject->title ) {
+			if ( $show->Title === $showObject->Title ) {
 				//remove show from showList
 				//$element = $showKey;
 				unset( $this->watchingList[ $showKey ] );
@@ -339,7 +340,7 @@ class ShowList extends MY_Model {
 		//find object in array
 		foreach ( $this->watchingList as $show ) {
 			//match title
-			if ( $show->title === $showObject->title ) {
+			if ( $show->Title === $showObject->Title ) {
 				//replace current episode with new one
 				$show->currentEpisode = $showObject->currentEpisode;
 				$show->currentSeason = $showObject->currentSeason;
@@ -350,6 +351,12 @@ class ShowList extends MY_Model {
 		}
 	}
 
+	
+	public function sortList(iSort $sortType){
+		$this->showList = $sortType->sortArray($this->showList);
+		
+	}
+	
 	/*public static
 	function getList() {
 		$db = self::db();

@@ -16,45 +16,88 @@ class Show extends CI_Model{
 	
 	//in json object
 	//from omdbapi
-	public $actors, $awards, $country, $director, $genre, $imdbID, $imdbRating, $imdbVotes, $language, $metascore, $plot, $poster, $rated, $ratings, $released, $response, $runtime, $seasons, $title, $type, $writer, $year;
+	//public $actors, $awards, $country, $director, $genre, $imdbID, $imdbRating, $imdbVotes, $language, $metascore, $plot, $poster, $rated, $ratings, $released, $response, $runtime, $seasons, $title, $type, $writer, $year;
+	
+	public $Genre, $imdbID, $imdbRating, $Plot, $Poster, $Released, $Runtime, $Seasons, $Title, $Type, $Year, $totalSeasons;
 	
 	//created in js
-	public $bestEpisode, $episodeListArray, $episodeRatingTotal, $episodeRatings, $ratingsArray, $totalEpisodes, $totalSeasons, $worstEpisode;
+	public $bestEpisode, $episodeListArray, $episodeRatingTotal, $episodeRatings, $ratingsArray, $totalEpisodes, $worstEpisode;
 	
 	//new properties
-	public $currentEpisode, $currentSeason, $totalEpisodesWatched;
-	
-	public $flagRemove;
+	public $currentEpisode, $currentSeason, $totalEpisodesWatched, $flagRemove;
 
 	
 	public function __construct($object=""){
-		if(empty($this->title)){
-			$this->title = '';
-			$this->plot = '';
-			$this->poster = '';
-			$this->rating = 0.0;
-			$this->totalSeasons = 0;
+		if($object){
+			//for everything
+			/*foreach($object as $key => $val){
+					$this->{lcfirst($key)} = $val;
+				}*/
+			
+			//customising data stored 
+//			$this->actors = $object->actors;
+//			$this->awards = $object->awards;
+//			$this->country = $object->country;
+//			$this->director = $object->director;
+			$this->Genre = $object->Genre;
+			$this->imdbID = (float)$object->imdbID;
+			$this->imdbRating = $object->imdbRating;
+//			$this->imdbVotes = $object->imdbVotes;
+//			$this->language = $object->language;
+//			$this->metascore = $object->metascore;
+			$this->Plot = $object->Plot;
+			$this->Poster = $object->Poster;
+//			$this->rated = $object->rated;
+//			$this->ratings = $object->ratings;
+			$this->Released = $object->Released;
+//			$this->response = $object->response;
+			$this->Runtime = $object->Runtime;
+//			$this->Seasons = $object->Seasons; //use Season object
+			$this->Title = $object->Title;
+			$this->Type = $object->Type;
+//			$this->writer = $object->writer;
+			$this->Year = $object->Year;
+			
+			$this->bestEpisode = $object->bestEpisode;
+			$this->episodeListArray = $object->episodeListArray;
+			$this->episodeRatingTotal = $object->episodeRatingTotal;
+			$this->episodeRatings = $object->episodeRatings;
+			$this->ratingsArray = $object->ratingsArray;
+			$this->totalEpisodes = $object->totalEpisodes;
+			$this->totalSeasons = $object->totalSeasons;
+			$this->worstEpisode = $object->worstEpisode;
+			
+			//if new show...
+		if(empty($object->currentEpisode)){
+			//these were never set, so set them
 			$this->currentEpisode = 0;
 			$this->currentSeason = 0;
 			$this->totalEpisodesWatched = 0;
-			
 			$this->flagRemove = false;
-			$this->flagWatching = false;
-			
-			
-			$this->seasons = array(new Season());
-			//$this->episodes = array(new Episode());
-			
-			$this->imdbID = '';
+		}else{
+			$this->currentEpisode = $object->currentEpisode;
+			$this->currentSeason = $object->currentSeason;
+			$this->totalEpisodesWatched = $object->totalEpisodesWatched;
+			$this->flagRemove = $object->flagRemove;
 		}
-		//if title passed, load it
-	
+			
+			//array of season
+			$this->Seasons = array();
+			//loop and create season objects
+			foreach($object->Seasons as $seasonObject){
+				$season = SeasonFactory::create($seasonObject);
+//				$season = new Season($seasonObject);
+				array_push($this->Seasons, $season);
+			};
+			
+			//get new season count after factory mwethod
+			$this->totalSeasons = $this->getSeasonCount();
+			
+			
+			//$this->Seasons = $object->Seasons;
+			
+		}
 		
-		if($object){
-			foreach($object as $key => $val){
-					$this->{lcfirst($key)} = $val;
-				}
-		}
 		
 		
 	}
@@ -66,28 +109,24 @@ class Show extends CI_Model{
 		
 	}
 	
-	//load
-	public function load($showID = ''){
-//		$file = './lost.json';
-//		$json = file_get_contents($file);
-//		$data = json_decode($json);
+	public function getSeasonCount(){
 		
-		$this->title = $data->title;
-		$this->plot = $data->Plot;
-		$this->poster = $data->Poster;
-		$this->imdbRating = $data->imdbRating;
-		$this->totalSeasons = $data->totalSeasons;
+		$newSeasonCount = 0;
 		
-		
-		//load all seasons based on totalSeasons
-		$this->seasons = array(new Season());
-		
-		$this->imdbID = $data->imdbID;
-		
-		$this->object = json_decode($data->object);
-		
-		
+		//make sure it's not empty
+		if($this->Seasons){
+			//loop through seasons
+			foreach($this->Seasons as $s){
+				//check class type
+				if(get_class($s) === "Season"){
+					//make sure only Seasons, and not UpcomingSeasons are being counted
+					$newSeasonCount++;
+				}
+			}
+		}
+		return $newSeasonCount;
 	}
+
 	
 	public function getShowRating(){
 		
@@ -102,62 +141,4 @@ class Show extends CI_Model{
 		return($showRatingTotal / $this->totalSeasons);
 	}
 	
-	//public function save(){
-	public function save($id = '', $e = ''){
-		// do some validation here
-		
-		if($this->id){
-			// update
-			
-			//connect
-			
-			$db = self::db();
-			
-			// Check connection
-			if ($db->connect_error) {
-				die("Connection failed: " . $db->connect_error);
-			} 
-			
-			$sql = "UPDATE investv SET episode=? WHERE id=?";
-			
-			if ($db->query($sql,[$e, $id]) === TRUE) {
-				echo "Record updated successfully";
-			} else {
-				echo "Error updating record: " . $db->error;
-			}
-			
-			$db->close();
-			
-		}else{
-			// save
-			$data = array(
-				'title' => $this->title,
-				'imdbID' => $this->imdbID,
-				'poster' => $this->poster,
-				'episode' => $this->episode,
-				'total' => $this->totalEpisodes,
-				'object' => json_encode($this->object));
-			
-			$this->db->insert('investv', $data);
-		}
-		
-	}
-	
-	public function delete(){
-		if($this->id){
-			// delete
-			$this->db->delete('investv', array('title' => $this->title));
-		}
-	}
-	
-	public static function getList(){
-		$db = self::db();
-		
-		$sql = "SELECT * FROM investv";
-		
-		$query = $db->query($sql);
-		$result = $query->custom_result_object('Show');
-		
-		return $result;
-	}
 }

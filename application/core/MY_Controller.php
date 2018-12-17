@@ -14,7 +14,11 @@ class MY_Controller extends CI_Controller{
 		/*---- For Show List ----*/
 		
 		$this->load->model('Episode');
+		$this->load->model('UpcomingEpisode');
+		
 		$this->load->model('Season');
+		$this->load->model('UpcomingSeason');
+		
 		$this->load->model('Show');
 		$this->load->model('MyShowList');
 		//$this->load->model('ShowList');
@@ -22,8 +26,19 @@ class MY_Controller extends CI_Controller{
 		//cannost use $this->load->model with singletons
 		include_once(APPPATH.'models/ShowList.php');
 		
+		//cannost use $this->load->model with abstract classes
+		include_once(APPPATH.'models/SeasonFactory.php');
+		include_once(APPPATH.'models/EpisodeFactory.php');
+		
+		//cannost use $this->load->model with interface
+		include_once(APPPATH.'interfaces/iSort.php');
+		//$this->load->model('TitleSortStrategy');
+		include_once(APPPATH.'models/TitleSortStrategy.php');
+		include_once(APPPATH.'models/RatingSortStrategy.php');
+		
+		
 		//sessions??
-		https://www.codeigniter.com/user_guide/libraries/loader.html
+		//https://www.codeigniter.com/user_guide/libraries/loader.html
 		//$this->load->driver('session');
 		
 		/*---- For Users ----*/

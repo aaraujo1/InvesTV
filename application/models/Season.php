@@ -2,87 +2,57 @@
 
 class Season extends CI_Model{
 	
-	public $showTitle, $season, $totalSeasons, $numberOfEpisodes, $seasonRating, $object;
+	public $Title, $Season, $totalSeasons, $Episodes;
 	
-	public $episodes;
+	public $seasonRatingAverage;
 	
 	
-	public function __construct($season = ''){
-		/*if(empty($this->episode)){
-			$this->showTitle = '';
-			$this->season = '';
-			$this->totalSeason = '';
+	public function __construct($object = ''){
 		
-			$this->episodes = array(new Episode());
+		if($object){
+			$this->Title = $object->Title;
+			$this->Season = $object->Season;
+			$this->totalSeasons = $object->totalSeasons;
 			
-			$this->numberOfEpisodes = '';
+			/*--------------------------------*/
+			/*---- FACTORY DESIGN PATTERN ----*/
+			/*--------------------------------*/
 			
-			//$this->episodes = array();
+			//array of episodes
+			$this->Episodes = array();
+			//loop and create season objects
+			foreach($object->Episodes as $episodeObject){
+				$episode = EpisodeFactory::create($episodeObject);
+//				$episode = new Episode($episodeObject);
+				array_push($this->Episodes, $episode);
+			};
+			
+			$this->seasonRatingAverage = $this->getSeasonRating();
 		}
-		//if title passed, load it
-		if($season){
-			$this->load($season);
-			
-		}*/
-		if($this->object){
-			$this->object = json_decode($this->object);
-		}
-		$this->showTitle = 
-		//$this->episodes = array();
 		
-		$this->load();
+		//if(empty($this->seasonRatingAverage
+		
 		
 	}
 	
-	public function load($sNumber = ''){
-		$file = './lost-season-1.json';
-		$json = file_get_contents($file);
-		$data = json_decode($json);
-		
-		$this->showTitle = $data->Title;
-		$this->season = $data->Season;
-		$this->totalSeasons = $data->totalSeasons;
-		
-		//load all seasons based on totalSeasons
-		$this->episodes = array(new Episode());
-		
-		$this->numberOfEpisodes = count($data->Episodes);
-		
-		
-		
-		
-		for ($i = 1; $i <= $this->numberOfEpisodes; $i++){
-			array_push($this->episodes, new Episode($i));
-		}
-		
-		
-		
-		/*foreach($data->Episodes as $e)
-		{
-    		if($e->Episode == $eNumber){
-        		$this->title = $e->Title;
-				$this->released = $e->Released;
-				$this->episode = $e->Episode;
-				$this->rating = $e->imdbRating;
-    		}
-		}  
-		*/
-		
-		
-		
-	}
 	
 	public function getSeasonRating(){
 		
 		$seasonRatingTotal = 0;
-		if($this->episodes){
-			
-			foreach($this->episodes as $e){
-				$seasonRatingTotal += $e->rating;
+		
+		if($this->Episodes){
+			//loop through episodes
+			foreach($this->Episodes as $e){
+				//check is class is Episode or Upcoming Episode
+				if(get_class($e) === "Episode"){
+					$seasonRatingTotal += $e->imdbRating;
+				}
 			}
-			
+			return($seasonRatingTotal / count($this->Episodes));
 		}
-		return($seasonRatingTotal / $this->numberOfEpisodes);
+		
+		return 0;
+		
 	}
 	
 }

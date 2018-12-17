@@ -116,7 +116,7 @@ app.controller('homeController', function ($scope, $http, $rootScope) {
 	$scope.episodeListArray = [];
 	$scope.totalEpisodes = 0;
 	//chart color
-	$scope.colors = "yellow";
+	$scope.colors = ["rgba(155,216,235,0.75)"];
 
 	//preloaded shows to view detail. hard coded objects.
 	$scope.preloadShowsBuy = [
@@ -440,23 +440,28 @@ app.controller('myShowsController', function ($scope, $http) {
 	$scope.currentEpisodeName = '';
 	$scope.remainingRating = '0';
 	$scope.user = {};
-	//$scope.colors = ["#f0ad4e"];
+	$scope.colors = ["rgba(155,216,235,0.75)"];
+	
+	$scope.sortAlphaOrder = 'ascending';
+	$scope.sortNumOrder = 'ascending';
 
-	//chart data and labels
-	//$scope.labels = [...Array(200).keys()];
 
 	angular.element(document).ready(function () {
-
+		$scope.loadShows();
+	});
+	
+	//load shows
+	$scope.loadShows = function(){
 		// get Shows from our database
 		$http({
 			method: 'get',
 			url: app.base_url + 'shows/listShows/' + 1 // CI route
 		}).then(function (response) {
-			console.log(response);
+			console.log(response.data);
 			$scope.showList = response.data.showList;
 			$scope.watchingList = response.data.watchingList;
 			$scope.removedList = response.data.removedList;
-			$scope.id = response.data.id;
+			//$scope.id = response.data.id;
 			$scope.loading = false;
 			
 			console.log($scope.showList);
@@ -468,12 +473,17 @@ app.controller('myShowsController', function ($scope, $http) {
 			$scope.loadShowStats(s);
 			
 		});
+			
+		$scope.watchingList.forEach(function(s){
+			console.log(s);
+			$scope.loadShowStats(s);
+			
+		});
 		
 		console.log($scope.showList);
 		console.log($scope.watchingList);
-
-});
-	});
+			});
+	};
 	
 	//get stats of a show
 	$scope.loadShowStats = function (show){
@@ -543,26 +553,27 @@ app.controller('myShowsController', function ($scope, $http) {
 	};
 	
 	//move to next episode in show
-	$scope.nextEpisode = function (show) {
+	$scope.nextEpisode = function (show, e) {
 		//add 1 to current episode
 		//check if no more episodes
 		
-		if (show.seasons[show.currentSeason].Episodes.length >  show.currentEpisode+1){
+		if (show.Seasons[show.currentSeason].Episodes.length >  show.currentEpisode+1){
 			//there are still episodes in the season
 			show.currentEpisode++;
 			show.totalEpisodesWatched++;
 		} else {
 			//there are no more episodes, so go to the next season
 			//check if there are more seasons
-			if (show.seasons.length >  show.currentSeason+1){
+			if (show.Seasons.length >  show.currentSeason+1){
 				//there are more seasons
 				show.currentSeason++;
 				//reset episode
 				show.currentEpisode = 0;
 				show.totalEpisodesWatched++;
 			}else{
-				//disable next button
-				//remove show from watching
+				$scope.removeWatching(show, e);
+				$scope.removeFromCollection(show, e);
+				
 			}
 		}
 
@@ -706,6 +717,94 @@ app.controller('myShowsController', function ($scope, $http) {
 		});
 	};
 	
+	$scope.sortAlpha = function () {
+
+		// get Shows from our database
+		$http({
+			method: 'get',
+			url: app.base_url + 'shows/sortListAlpha/' + $scope.sortAlphaOrder// CI route
+		}).then(function (response) {
+			console.log(response.data);
+			$scope.showList = response.data.showList;
+			console.log($scope.showList);
+
+			//$scope.sortAlphaOrder = $scope.sortAlphaOrder === 'ascending' ? 'descending' :  'ascending';
+			if($scope.sortAlphaOrder === 'ascending'){
+				document.getElementById("sortAlphaDown").style = 'color: #0275d8';
+				document.getElementById("sortAlphaUp").style = '';
+				$scope.sortAlphaOrder = 'descending';
+				
+			}else{
+				document.getElementById("sortAlphaUp").style = 'color: #0275d8';
+				document.getElementById("sortAlphaDown").style = '';
+				$scope.sortAlphaOrder = 'ascending';
+			}
+			
+		});
+
+	};
+	
+	$scope.sortNum = function () {
+
+		// get Shows from our database
+		$http({
+			method: 'get',
+			url: app.base_url + 'shows/sortListNum/' + $scope.sortNumOrder// CI route
+		}).then(function (response) {
+			console.log(response.data);
+			$scope.showList = response.data.showList;
+			console.log($scope.showList);
+
+			//$scope.sortNumOrder = $scope.sortNumOrder === 'ascending' ? 'descending' :  'ascending';
+			if($scope.sortNumOrder === 'ascending'){
+				document.getElementById("sortNumDown").style = 'color: #0275d8';
+				document.getElementById("sortNumUp").style = '';
+				$scope.sortNumOrder = 'descending';
+				
+			}else{
+				document.getElementById("sortNumUp").style = 'color: #0275d8';
+				document.getElementById("sortNumDown").style = '';
+				$scope.sortNumOrder = 'ascending';
+			}
+			
+		});
+
+	};
+	
+	$scope.stdDev = function(show){
+		//var multiplier = 1;
+		var rating = show.Seasons[show.currentSeason].Episodes[show.currentEpisode].imdbRating;
+		
+		if(rating === show.episodeRatings){
+			//0 deviation
+			return 0;
+		}else if(rating < show.episodeRatings){
+			//negative deviation
+			if (rating > show.episodeRatings - show.stats.standardDeviation){
+				return 'within -1';
+			}else if(rating > show.episodeRatings - (2*show.stats.standardDeviation)){
+				return 'within -2';	 
+			}else if(rating > show.episodeRatings - (3*show.stats.standardDeviation)){
+				return 'within -3';
+			}else{
+				return 'more than -3';
+			}
+		}else{
+			//positive deviation
+			if (rating < show.episodeRatings + show.stats.standardDeviation){
+				return 'within 1';
+			}else if(rating < show.episodeRatings + (2*show.stats.standardDeviation)){
+				return 'within 2';	 
+			}else if(rating < show.episodeRatings + (3*show.stats.standardDeviation)){
+				return 'within 3';
+			}else{
+				return 'more than 3';
+			}
+		}
+		
+		
+	};
+	
 });
 
 //register user
@@ -847,5 +946,14 @@ app.controller('userController', function ($scope, $http, $routeParams) {
 		
 	};
 
+	$scope.sumMinutes = function(){
+		var minutes = [];
+		
+		$scope.removedList.forEach(function(show){
+			minutes.push((show.totalEpisodes - show.totalEpisodesWatched) * parseFloat(show.Runtime.substring(0, show.Runtime.length - 1)));
+		});
+		
+		return math.sum(minutes);
+	};
 
 });

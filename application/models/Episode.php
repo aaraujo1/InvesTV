@@ -2,12 +2,10 @@
 
 class Episode extends CI_Model{
 	
-	public $showTitle, $season, $title, $released, $episode, $rating;
+	public $Title, $Released, $Episode, $imdbRating, $imdbID;
 	
-	public $episodes;
-	
-	public function __construct($episode = ''){
-		if(empty($this->episode)){
+	public function __construct($object = ''){
+		/*if(empty($this->episode)){
 			//$this->showTitle = '';
 			//$this->season = '';
 			$this->title = '';
@@ -18,10 +16,14 @@ class Episode extends CI_Model{
 			//$this->episodes = (object)[""];
 			
 			//$this->episodes = array();
-		}
+		}*/
 		//if title passed, load it
-		if($episode){
-			$this->load($episode);
+		if($object){
+			$this->Title = $object->Title;
+			$this->Released = $object->Released;
+			$this->Episode = $object->Episode;
+			$this->imdbRating = (float)$object->imdbRating;
+			$this->imdbID = $object->imdbID;
 		}
 		
 	}

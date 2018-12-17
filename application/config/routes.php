@@ -57,7 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['shows/add'] = 'Shows/add';
 $route['shows/list'] = 'Shows/listShows';
 //$route['shows/remove/(:num)'] = 'Shows/remove/$1';
-$route['shows/remove'] = 'Shows/remove';
+//$route['shows/remove'] = 'Shows/remove';
 
 
 $route['shows/(:any)-(:any)'] = 'Shows/detail/$1';
@@ -65,4 +65,7 @@ $route['login/registerNewUser'] = 'login/registerNewUser';
 
 $route['login/getUser/(:any)'] = 'Login/getUser/$1';
 $route['shows/listShows/(:num)'] = 'Shows/listShows/$1';
+
+$route['shows/sortListAlpha/(:any)'] = 'Shows/sortListAlpha/$1';
+$route['shows/sortListNum/(:any)'] = 'Shows/sortListNum/$1';
 
