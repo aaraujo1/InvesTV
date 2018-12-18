@@ -298,6 +298,8 @@ app.controller('showsController', function ($scope, $http, $rootScope, $routePar
 
 	};
 
+	/*------ USING PROMISES ------*/
+	
 	/*---- load seasons of a show ----*/
 	$scope.loadSeasons = function (seasons) {
 		//var counter = 0;
@@ -458,6 +460,10 @@ app.controller('myShowsController', function ($scope, $http) {
 		$scope.loadShows();
 	});
 	
+	/*--------------------------------------*/
+	/*------ METHODS TO GET SHOW LIST ------*/
+	/*--------------------------------------*/ 
+	
 	//load shows
 	$scope.loadShows = function(){
 		// get Shows from our database
@@ -493,6 +499,8 @@ app.controller('myShowsController', function ($scope, $http) {
 			});
 	};
 	
+	/*------ USING MATH JS ------*/
+	
 	//get stats of a show
 	$scope.loadShowStats = function (show){
 		show.stats = {};
@@ -526,6 +534,10 @@ app.controller('myShowsController', function ($scope, $http) {
 		show.stats.outliers = show.stats.lowerOutliers.length + show.stats.upperOutliers.length;
 	};
 
+	/*---------------------------------------*/
+	/*------ METHODS TO EDIT SHOW LIST ------*/
+	/*---------------------------------------*/
+	
 	//add show to watching list
 	$scope.addWatching = function (show, e){
 		
@@ -1029,7 +1041,7 @@ app.controller('userController', function ($scope, $http, $routeParams) {
 	if ($scope.sumMin > 115200) {
 		return 'travel around the world in 80 days';
 	} else if ($scope.sumMin > 1440) {
-		return 'orbit the sun';
+		return 'sleep all day';
 	}else if ($scope.sumMin > 400) {
 		return 'drive to Nashville and sign a record deal';
 	}else if ($scope.sumMin > 160) {

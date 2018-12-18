@@ -1,3 +1,5 @@
+<hr>
+
 <h4 class="text-center">{{show.Title}}</h4>
 <div class="row">
 		<canvas 
@@ -23,13 +25,14 @@
 		<strong>Total Seasons: </strong>{{show.totalSeasons}}<br />
 		<strong>Total Episodes: </strong>{{show.totalEpisodes}}<br />
 		<strong>Runtime per Episode: </strong>{{show.Runtime}}<br />
-		<strong>Total Runtime: </strong>{{show.totalEpisodes * (show.Runtime|num)}} min<br />
+		<strong>Total Runtime: </strong>{{(show.totalEpisodes * (show.Runtime|num)) | numberWithCommas}} min<br />
 		
 		<strong>Show Rating: </strong>{{show.imdbRating}} <br />
 		<!--<strong>Average Episode Rating: </strong>{{show.episodeRatings}} <br />-->
 		
-		<strong>Best Episode: </strong>{{show.bestEpisode}}<br />
-		<strong>Worst Episode: </strong>{{show.worstEpisode}}<br />
-		<button class="btn btn-primary" ng-click="addToList($event)" title="Add {{show.Title}} to your collection">Add to Collection</button>
+		<!--<strong>Best Episode: </strong>{{show.bestEpisode}}<br />
+		<strong>Worst Episode: </strong>{{show.worstEpisode}}<br />-->
+		<button class="btn btn-primary" ng-click="addToList($event)" title="Add {{show.Title}} to your collection">For me details, add to Collection</button>
 	</div>
 </div>
+<hr>
