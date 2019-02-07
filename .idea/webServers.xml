@@ -2,7 +2,7 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="59f38b4d-b202-46de-83d4-e6b3dc15df61" name="bitlamp" url="http://aaraujo1.bitlampsites.com/php2">
+      <webServer id="59f38b4d-b202-46de-83d4-e6b3dc15df61" name="bitlamp (project level)" url="http://aaraujo1.bitlampsites.com/php2">
         <fileTransfer host="aaraujo1.bitlampsites.com" port="22" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
